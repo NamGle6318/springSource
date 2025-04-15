@@ -53,7 +53,7 @@ spring
 - 경로 임의 생성
     - http://localhost:8080/ ==> Controller 파일의 메소드와 매핑
     
-    - url 설계
+    - uri 설계
         - ex | 게시글 작성 : /board/create
              | 게시글 목록 : /board/list
              | 게시글 조회 : /board/read
@@ -77,3 +77,53 @@ spring
         void Controller
         -> http://localhost:8080/board/update 브라우저요청 => 무언가 => Controller 응답 => templates 찾기(templates/board/update)
         => templates/board/update.html
+
+        spring boot의 내장서버 : Tomcat(spring boot가 포함하고 있음. 원래 설치해서 사용 해야함.)
+        http://localhost:8080 -> Tomcat이 만든거 -> Tomcat의 기본 경로
+
+        브라우저를 통해 http(80), https(443) 프르토콜에 응답하는 서버 : SW 웹서버(Apache, NginX)
+        WAS(Web Application Server) : SW 웹서버 + Java 해석 => Tomcat(free WAS)
+
+    
+- 오류발생
+    404 : 컨트롤러 경로 확인
+    405 : 컨트롤러 경로 + 매핑방식 확인
+
+- 사용자 입력값 가져오기
+    (1) : 변수 이용 : 타입 지정 가능, 변수명은 form요소의 이름과 일치
+    (2) : Model : 커맨드(DTO) 객체 이용 : 타입 지정 가능, 변수명은 form요소의 이름과 일치 
+                                          커맨드 객체 사용시 장점은 template 페이지까지 입력값이 유지됨
+    (3) : HttpServletRequest : 해당 객체는 사용자의 정보, 서버의 정보를 갖고 있어서 추출 가능
+                             : 1, 2번은 Spring Framework를 사용하기에 가능한 방법임.
+
+- @ModelAttribute 
+    - 별칭 설정
+    - model.addAttribute("num1", num1) == @ModelAttribute("num1") : template 페이지에서 값을 유지하고 싶다면
+
+- redirect : 다른 주소로 다시 요청하기
+    ex : return "redirect:/member/login" = 현재 위치에서 return에 해당하는 주소로 다시 요청한다
+
+- RedirectAttributes : 컨트롤러에서 움직이는 방식이 redirect 일 때 사용 / 움직이면서 특정 값을 가지고 가고 싶을 때 사용
+    rttr.addAttribute("userid", memberDTO.getUserid()); => 템플릿 ${param.userid}
+    rttr.addAttribute("userid", 10); ?userid=10; session 객체에 담는것과 같은 방식 => 템플릿 ${password}
+
+- 데이터 유지하기 (forward 방식)
+    - login.html 입력값 => login컨트롤러 => logout.html 입력값을 유지 하고 싶다면?
+        - @ModelAttribute("별칭") <T> name
+        - model.addAttribute("name" name)
+    - login.html 입력값 => login컨트롤러 => 모든 페이지에서 입력값을 유지 하고 싶다면?
+        - session : 값을 서버 쪽에 저장함(객체 형태로 담는 것 가능)
+            httpSession을 이용해 저장 => 필요없는 경우 제거 OR 현재 세션이 유지되고 있는 브라우저 닫으면 종료
+        - 쿠키 : 값을 클라이언트 브라우저로 전송 후 저장
+    - login.html 입력값 => login컨트롤러 => 다른 페이지에서 입력값 소멸
+        - 컨트롤러에서 지역변수로만 받아오는 경우
+
+- redirect로 이동하면서 입력값을 유지하려면? (redirect 방식)
+    - RedirectAttributes 생성
+    - RedirectAttributes.addAttribute("name", name) 실행
+    - param.name으로 불러오기 (addAttribute)
+    - 혹은 name (addFlashAttribute)
+
+- session : 값을 서버 쪽에 저장함(객체 형태로 담는 것 가능)
+        - httpSession을 이용해 저장 => 필요없는 경우 제거 OR 현재 세션이 유지되고 있는 브라우저 닫으면 종료
+        - 쿠키 : 값을 클라이언트 브라우저로 전송 후 저장
