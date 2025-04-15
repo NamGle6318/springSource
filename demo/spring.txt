@@ -13,18 +13,18 @@ spring
 
 3. 언어 선택 : java
 
-4. 패키지명 : com.example.demo(패키지명은 상관없으나 기본적으로 3개씩은 사용해야함)
+4. 패키지명 : com.example.demo(패키지명은 상관없으나 기본적으로 3개씩은 사용해야함), 보통 도메인명을 거꾸로 한다
 
 5. 패키징타입 : jar(자바 압축파일) or war(자바 웹 압축파일 [-jsp])
 
-6. 언어 버전 선택 : 부트버전에 따라서 선택이 달라질 수 있음
+6. 언어 버전 선택 : spring boot의 버전에 따라서 사용가능한 언어의 버전이 달라질 수 있음 - 우리는 java 17버전 사용
 
 7. 필요 라이브러리 선택 : 선택한 라이브러리들은 pom.xml에 반영되있음
     - Spring Web
     - dev tools
     - thymeleaf
     - lombok
-    - 추가 예정 : pom.xml -> Add Spring boot Starters ... ctrl + click
+    - 추가 시 : pom.xml -> Add Spring boot Starters ... ctrl + click
 ---------------------------------------------------------------------------------------------------
 
 화면(front) 단 작성 : html + css + javascript + java 
@@ -33,7 +33,7 @@ spring
     - Spring boot에서 jsp를 사용하기 위해서는 설정 작업이 필요
 
 - 템플릿 엔진 활용 : *.html
-    - thymeleaf 사용 중 
+    - thymeleaf 채택(jsp처럼 설정할 필요가 없고 spring boot에 포함되어 있음.)
     - 그 외 : mustache, groovy, freemaker, velocity, ...
 
 - 스프링 주요 개념
@@ -51,9 +51,9 @@ spring
     - 어노테이션 : @Controller, @Service, @Component
 
 - 경로 임의 생성
-    - http://localhost:8080/ ==> Controller 파일의 메소드와 매핑
+    - http://localhost:8080/(Tomcat의 기본 주소) ==> Controller 파일의 메소드와 매핑
     
-    - uri 설계
+    - 웹 개발시 uri 설계를 우선
         - ex | 게시글 작성 : /board/create
              | 게시글 목록 : /board/list
              | 게시글 조회 : /board/read
@@ -73,10 +73,12 @@ spring
         String Controller
         -> http://localhost:8080/board/create 브라우저요청 => 무언가 => Controller 응답 => templates 찾기(templates/return 값)
         => templates/info.html 작성
+        : return "경로", 반환된 경로를 찾음
 
         void Controller
         -> http://localhost:8080/board/update 브라우저요청 => 무언가 => Controller 응답 => templates 찾기(templates/board/update)
         => templates/board/update.html
+        : return이 없으므로 mapping한 경로를 찾음
 
         spring boot의 내장서버 : Tomcat(spring boot가 포함하고 있음. 원래 설치해서 사용 해야함.)
         http://localhost:8080 -> Tomcat이 만든거 -> Tomcat의 기본 경로
@@ -85,14 +87,18 @@ spring
         WAS(Web Application Server) : SW 웹서버 + Java 해석 => Tomcat(free WAS)
 
     
-- 오류발생
-    404 : 컨트롤러 경로 확인
+- 코드 별 설명
+    101 : Switching Protocols : 프로토콜이 바뀌었음. (ex: 80->다른거)
+    200 : OK 
+    400 : Bad Request : 클라이언트가 잘못된 요청을 보냈다. (ex: 숫자 입력해야되는 칸에 문자 입력했는데, 개발자가 따로 처리해둔게 없어서 그대로 서버에 전송되는 경우)
+    404 : Not Found : 컨트롤러 경로 확인
     405 : 컨트롤러 경로 + 매핑방식 확인
+    500 : Internal Server Error : 서버에서 오류 발생
 
 - 사용자 입력값 가져오기
-    (1) : 변수 이용 : 타입 지정 가능, 변수명은 form요소의 이름과 일치
-    (2) : Model : 커맨드(DTO) 객체 이용 : 타입 지정 가능, 변수명은 form요소의 이름과 일치 
-                                          커맨드 객체 사용시 장점은 template 페이지까지 입력값이 유지됨
+    (1) : 지역변수 이용 : 타입 지정 가능, 변수명은 form요소의 이름과 일치
+    (2) : Model, 커맨드(DTO) 객체 이용 : 타입 지정 가능, 변수명은 form요소의 이름과 일치 
+                                         (2)번 사용시 장점은 template 페이지까지 입력값이 유지됨
     (3) : HttpServletRequest : 해당 객체는 사용자의 정보, 서버의 정보를 갖고 있어서 추출 가능
                              : 1, 2번은 Spring Framework를 사용하기에 가능한 방법임.
 
@@ -104,25 +110,27 @@ spring
     ex : return "redirect:/member/login" = 현재 위치에서 return에 해당하는 주소로 다시 요청한다
 
 - RedirectAttributes : 컨트롤러에서 움직이는 방식이 redirect 일 때 사용 / 움직이면서 특정 값을 가지고 가고 싶을 때 사용
+    (RedirectAttributes rttr = new RedirectAttributes)
     rttr.addAttribute("userid", memberDTO.getUserid()); => 템플릿 ${param.userid}
     rttr.addAttribute("userid", 10); ?userid=10; session 객체에 담는것과 같은 방식 => 템플릿 ${password}
 
-- 데이터 유지하기 (forward 방식)
-    - login.html 입력값 => login컨트롤러 => logout.html 입력값을 유지 하고 싶다면?
-        - @ModelAttribute("별칭") <T> name
-        - model.addAttribute("name" name)
-    - login.html 입력값 => login컨트롤러 => 모든 페이지에서 입력값을 유지 하고 싶다면?
-        - session : 값을 서버 쪽에 저장함(객체 형태로 담는 것 가능)
-            httpSession을 이용해 저장 => 필요없는 경우 제거 OR 현재 세션이 유지되고 있는 브라우저 닫으면 종료
-        - 쿠키 : 값을 클라이언트 브라우저로 전송 후 저장
-    - login.html 입력값 => login컨트롤러 => 다른 페이지에서 입력값 소멸
-        - 컨트롤러에서 지역변수로만 받아오는 경우
+- 데이터 유지하기 (forward 방식, redirect방식)
+    - forward방식
+        - login.html 입력값 => login컨트롤러 => logout.html 입력값을 유지 하고 싶다면?
+            - @ModelAttribute("별칭") <T> name
+            - model.addAttribute("name" name)
+        - login.html 입력값 => login컨트롤러 => 모든 페이지에서 입력값을 유지 하고 싶다면?
+            - session : 값을 서버 쪽에 저장함(객체 형태로 담는 것 가능)
+                httpSession을 이용해 저장 => 필요없는 경우 제거 OR 현재 세션이 유지되고 있는 브라우저 닫으면 종료
+            - 쿠키 : 값을 클라이언트 브라우저로 전송 후 저장
+        - login.html 입력값 => login컨트롤러 => 다른 페이지에서 입력값 소멸
+            - 컨트롤러에서 지역변수로만 받아오는 경우
 
-- redirect로 이동하면서 입력값을 유지하려면? (redirect 방식)
-    - RedirectAttributes 생성
-    - RedirectAttributes.addAttribute("name", name) 실행
-    - param.name으로 불러오기 (addAttribute)
-    - 혹은 name (addFlashAttribute)
+    - redirect로 이동하면서 입력값을 유지하려면? (redirect 방식)
+        - RedirectAttributes 생성
+        - RedirectAttributes.addAttribute("name", name) 실행
+        - param.name으로 불러오기 (addAttribute)
+        - 혹은 name (addFlashAttribute)
 
 - session : 값을 서버 쪽에 저장함(객체 형태로 담는 것 가능)
         - httpSession을 이용해 저장 => 필요없는 경우 제거 OR 현재 세션이 유지되고 있는 브라우저 닫으면 종료

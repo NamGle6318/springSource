@@ -35,7 +35,7 @@
         <td th:text="${dto.id}"></td>
         <td th:text="${dto.first}"></td>
         <td th:text="${dto.last}"></td>
-        <!-- #temporals.format(String, 'Dateformat') -->
+        <!-- #temporals.format(String, 'Dateformat') : 날짜형식 지정 가능-->
         <td th:text="${#temporals.format(dto.regDateTime, 'yyyy-MM-dd')}"></td>
       </tr>
     </table>
@@ -72,6 +72,7 @@
         <th>last</th>
         <th>regTime</th>
       </tr>
+      <!-- if(for()) -->
       <tr th:each="dto : ${list}" th:if="${dto.id % 5 == 0}">
         <td th:text="${dto.id}"></td>
         <td th:text="${dto.first}"></td>
