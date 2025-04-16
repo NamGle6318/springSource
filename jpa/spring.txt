@@ -24,7 +24,7 @@ spring
     - dev tools
     - thymeleaf
     - lombok
-    - thymeleaf dialect
+    - 
     - 추가 시 : pom.xml -> Add Spring boot Starters ... ctrl + click
 ---------------------------------------------------------------------------------------------------
 
