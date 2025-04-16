@@ -128,10 +128,24 @@ spring
 
     - redirect로 이동하면서 입력값을 유지하려면? (redirect 방식)
         - RedirectAttributes 생성
-        - RedirectAttributes.addAttribute("name", name) 실행
+        - RedirectAttributes.addAttribute("name", name) 실행 
         - param.name으로 불러오기 (addAttribute)
         - 혹은 name (addFlashAttribute)
 
 - session : 값을 서버 쪽에 저장함(객체 형태로 담는 것 가능)
         - httpSession을 이용해 저장 => 필요없는 경우 제거 OR 현재 세션이 유지되고 있는 브라우저 닫으면 종료
         - 쿠키 : 값을 클라이언트 브라우저로 전송 후 저장
+
+        
+
+경로 설정
+http://localhost:8080/ 고정
+
+href 경로 설정 시 현재경로(주소줄에 있는 경로)
+
+현재경로 : http://localhost:8080/sample
+
+th:href="@{ex2(id=${dto.id})} : http://localhost:8080/ex2 (/를 안붙히면 => 현재경로에서 제일 마지막의 경로만 대체하여 주소 설정)
+th:href="@{/ex2(id=${dto.id})} : http://localhost:8080/다음 부터 집어넣기 (/를 붙히면 / 이후의 경로부터 대체)
+
+움직일 경로 http://localhost:8080/ex2

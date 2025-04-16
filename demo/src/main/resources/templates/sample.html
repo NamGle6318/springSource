@@ -54,7 +54,9 @@
       </tr>
       <tr th:each="dto,state : ${list}">
         <td th:text="${dto.id}"></td>
-        <td th:text="${dto.first}"></td>
+        <td>
+          <a th:href="@{ex2(id=${dto.id})}" th:text="${dto.first}"></a>
+        </td>
         <td th:text="${dto.last}"></td>
         <td th:text="${#temporals.format(dto.regDateTime, 'yyyy-MM-dd')}"></td>
         <td th:text="${state.index}"></td>
@@ -105,6 +107,37 @@
       </li>
     </ul>
 
+    <h3>웹 페이지 링크</h3>
+    <ul>
+      <!--
+      배포 : 실제 서버에 프로그램을 올리는 작업 
+       
+      HTTP://LOCALHOST:8080/로컬 = 배포 작업이 이루어지지 않은 상태
+      http://도메인주소/app/member/login = 배포 작업이 이루어진 상태
+      th:href나 href 경로는 똑같이 표현
+      th:href는 위의 두 경우처럼 경로가 변해도 자동으로 찾아 줌
+      또 파라메터를 보내는 방법이 달라짐
+      href : /member/login?id=hong
+      th:href : /member/login(id='hong')
+      
+      -->
+      <!-- http://localhost:8080/calc -->
+      <li><a th:href="@{calc}">calc</a></li>
+      <!-- http://localhost:8080/ex1?param1=data1&param2=10 -->
+      <li><a th:href="@{ex1(param1='data1', param2=10)}">ex1</a></li>
+    </ul>
+
+    <h3>thymeleaf 유틸리티 객체</h3>
+    <ul>
+      <li th:text="${price}"></li>
+      <!-- 숫자값에 세자리 단위로 콤마 추가하기 -->
+      <li th:text="${#numbers.formatInteger(price, 3, 'COMMA')}"></li>
+      <li th:text="${options}"></li>
+      <li th:text="${#lists.contains(options, 'AAAA')}"></li>
+      <li th:text="${title}"></li>
+      <li th:text="${#strings.replace(title, 's', '<b>s</b>')}"></li>
+      <li th:text="${#dates.format(now, 'yyyy/MM/dd')}"></li>
+    </ul>
     <script>
       // js에서 thymeleaf로 값 불러오고 싶으면 '', ""로 감싸주기
       const name = "[[${name}]]";

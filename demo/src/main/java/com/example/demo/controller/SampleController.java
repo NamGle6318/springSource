@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.dto.SampleDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Log4j2
 @Controller
@@ -42,6 +45,24 @@ public class SampleController {
             list.add(sampleDTO);
         }
         model.addAttribute("list", list);
+
+        model.addAttribute("price", 123456789);
+        model.addAttribute("title", "This is a just sample");
+        model.addAttribute("now", new Date());
+        model.addAttribute("options", Arrays.asList("AAAA", "BBBB", "CCCC", "DDDD"));
+
+    }
+
+    @GetMapping("/ex1")
+    public void getEx1(String param1, int param2) {
+        log.info("파라메터 확인");
+        log.info("param1 {}, param2 {}", param1, param2);
+
+    }
+
+    @GetMapping("/content")
+    public void getContent() {
+
     }
 
 }
