@@ -32,7 +32,7 @@ public class MemoRepositoryTest {
         // memoRepository.save(memo);
 
         Memo memo = memoRepository.findById(1L).get();
-        memo.setMemoText("memoText update");
+        memo.changeMemoText("memoText update");
         memoRepository.save(memo);
     }
 
