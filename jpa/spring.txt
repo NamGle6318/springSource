@@ -51,6 +51,17 @@ spring
     - 싱글톤 방식으로 객체 생성 [싱글톤 : 객체는 하나만 생성]
     - 어노테이션 : @Controller, @Service, @Component
 
+    - injection(주입) 
+        - (@Controller, @Service, @Component, Repository는 내부적으로 해줌)
+         어노테이션을 통해서 생성된 객체를 "*언제, 어디에" 사용할 것인지를 알려주는 개념
+        - @Autowired를 통해 필요한 객체 위에 작성("*언제, 어디에" 사용할지를 명시해줌)
+        - 1. @Controller, @Service, @Component을 입력한 클래스를 컨테이너에 보관 중
+        - 2. @Autowired를 통해 컨테이너가 관리하던 해당 객체를 주입해줌
+
+        @Autowired                             = @RequiredArgsConstructor
+        private MemoRepository memoRepository; = private final MemoRepository memoRepository;
+        - 두 문장은 같은 의미가 되나, 테스트 클래스에서는 @RequiredArgsConstructor을 통한 방법이 안됨
+
 - 경로 임의 생성
     - http://localhost:8080/(Tomcat의 기본 주소) ==> Controller 파일의 메소드와 매핑
     
