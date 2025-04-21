@@ -8,7 +8,7 @@
 */mvnw
 *mvnw.cmd
 */.mvn/wrapper/maven-wrapper.properties
-
+settings.json
 
 ### Java ###
 # Compiled class file
