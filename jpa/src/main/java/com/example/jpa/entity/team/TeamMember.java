@@ -2,9 +2,11 @@ package com.example.jpa.entity.team;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "team")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +35,8 @@ public class TeamMember {
 
     private String userName;
 
-    @ManyToOne // 1 : N = Team : User
-    private Team team; // Team_Team_ID (N_Name)
+    // @ManyToOne(fetch = FetchType.LAZY) // 1 : N = Team : User
+    @ManyToOne
+    @JoinColumn(name="id") // team_id로 함. -> PK랑 이름 겹쳐서 안됐었음
+    private Team team;  // Team_Team_ID (N_Name)
 }
