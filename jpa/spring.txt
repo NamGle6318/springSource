@@ -223,3 +223,12 @@ Repository + Entity
         2. findById() : select(where)
         3. findAll : select(*)
         4. deliteById() / delete(Entity) : 삭제
+
+
+
+pom.xml 외부 라이브러리 (modelMapper) : DTO <=> Entity 변환을 자동으로 처리
+
+modelMapper 사용법
+    1. RootConfig.java 작성
+    2. DTO 생성시 ModelMapper.map(원본, 변경할 타입) 작성
+                MemoDTO dto = modelMapper.map(memo, MemoDTO.class);

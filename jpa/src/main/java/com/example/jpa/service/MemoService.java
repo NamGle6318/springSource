@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.example.jpa.repository.StudentRepository;
 
@@ -20,6 +21,7 @@ public class MemoService {
     // repository 메소드를 호출한 후 결과 받기
 
     private final MemoRepository memoRepository;
+    private final ModelMapper modelMapper;
 
     public List<MemoDTO> getList() {
         List<Memo> list = memoRepository.findAll();
@@ -51,12 +53,22 @@ public class MemoService {
     // return memos;
     // }
 
+    // public MemoDTO getRow(long mno) {
+    // Memo memo =
+    // memoRepository.findById(mno).orElseThrow(EntityNotFoundException::new);
+    // MemoDTO dto = entityToDto(memo);
+
+    // return dto;
+
+    // }
+
+    // ModelMapper를 사용해서 getRow 실행하기
     public MemoDTO getRow(long mno) {
         Memo memo = memoRepository.findById(mno).orElseThrow(EntityNotFoundException::new);
-        MemoDTO dto = entityToDto(memo);
+
+        MemoDTO dto = modelMapper.map(memo, MemoDTO.class);
 
         return dto;
-
     }
 
     public long memoUpdate(MemoDTO memoDTO) {
@@ -77,7 +89,7 @@ public class MemoService {
         // 새로 입력할 memo는 memoDTO에 이미 저장이 된 상태
         // save(entity)를 실행하기위해
         // DTO -> entity로 변환하는 작업 필요
-        Memo memo = dtoToEntity(memoDTO);
+        Memo memo = modelMapper.map(memoDTO, Memo.class);
         memo = memoRepository.save(memo);
         return memo.getMno();
     }
