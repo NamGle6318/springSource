@@ -37,6 +37,6 @@ public class TeamMember {
 
     // @ManyToOne(fetch = FetchType.LAZY) // 1 : N = Team : User
     @ManyToOne
-    @JoinColumn(name="id") // team_id로 함. -> PK랑 이름 겹쳐서 안됐었음
-    private Team team;  // Team_Team_ID (N_Name)
+    @JoinColumn(name = "id") // team_id로 함. -> PK랑 이름 겹쳐서 안됐었음
+    private Team team; //
 }

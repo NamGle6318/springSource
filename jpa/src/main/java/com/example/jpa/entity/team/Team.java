@@ -1,5 +1,6 @@
 package com.example.jpa.entity.team;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -37,7 +38,12 @@ public class Team {
 
     private String teamName;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL) // Lazy
-    private List<TeamMember> members;
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @Builder.Default
+    private List<TeamMember> members = new ArrayList<>();
+    // Cascade
+    // PERSIST
+    // REMOVE
+    // ALL : 부모의 모든 부분을 자식도 영속?
 
 }

@@ -1,5 +1,7 @@
 package com.example.jpa.entity.sports;
 
+import com.example.jpa.entity.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,16 +23,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(exclude = "locker")
 @Entity
-public class SportsMember {
+public class SportsMember extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="MEMBER_ID")
+    @Column(name = "MEMBER_ID")
     private long id;
-
 
     private String name;
 
-    
     @OneToOne(fetch = FetchType.LAZY)
     private Locker locker;
 }
