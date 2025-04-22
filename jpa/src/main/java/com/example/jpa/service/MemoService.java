@@ -38,7 +38,7 @@ public class MemoService {
         // }
 
         // list.stream().forEach(memo -> System.out.println(memo));
-        memos = list.stream().map(memo -> entityToDto(memo)).collect(Collectors.toList());
+        memos = list.stream().map(memo -> modelMapper.map(memo, MemoDTO.class)).collect(Collectors.toList());
 
         return memos;
     }
