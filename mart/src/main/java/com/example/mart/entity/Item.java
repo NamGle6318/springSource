@@ -48,7 +48,4 @@ public class Item extends BaseEntity {
     @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private Categorys catecorys;
-
 }
