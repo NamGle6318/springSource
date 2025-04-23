@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +11,9 @@ import com.example.demo.dto.MemberDTO;
 import lombok.extern.log4j.Log4j2;
 // import com.example.demo.dto.LoginDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Log4j2
@@ -24,13 +26,20 @@ public class MemberController {
     // 비밀번호 변경 / member/change
 
     @GetMapping("/register")
-    public void getRegister() {
+    public void getRegister(@ModelAttribute("mDTO") MemberDTO memberDTO) {
         log.info("회원가입");
     }
 
     @PostMapping("/register")
-    public String postRegister(@ModelAttribute("mDTO") MemberDTO memberDTO, RedirectAttributes rttr) {
+    public String postRegister(@ModelAttribute("mDTO") @Valid MemberDTO memberDTO, BindingResult result,
+            RedirectAttributes rttr) {
         log.info("회원가입 요청 {}", memberDTO);
+
+        // 유효성 검사를 통과하지 못했다면 원래 입력 페이지로 돌아가기
+        if (result.hasErrors()) {
+            return "/member/register";
+        }
+
         log.info("{} {}", memberDTO.getUserid(), memberDTO.getPassword());
         log.info(memberDTO.isCheck());
 
