@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
+import com.example.mart.entity.Category;
+import com.example.mart.entity.CategoryItem;
 import com.example.mart.entity.Delivery;
 import com.example.mart.entity.Item;
 import com.example.mart.entity.Member;
@@ -283,4 +285,87 @@ public class MartRepositoryTest {
     }
 
     // 1번 상품에 SHIRTS라는 카테고리를 붙히고, Category
+
+    // ----------------------------------------------------------------------------------
+    // M : N 테스트해보기
+    // ----------------------------------------------------------------------------------
+
+    @Autowired
+    public CategoryItemRepository categoryItemRepository;
+    @Autowired
+    public CategoryRepository categoryRepository;
+
+    @Test
+    public void testCategoryItemInsert1() {
+        // 카테고리 입력
+        Category category = Category.builder()
+                .name("가전제품")
+                .build();
+
+        Category category2 = Category.builder()
+                .name("식품")
+                .build();
+
+        Category category3 = Category.builder()
+                .name("생활용품")
+                .build();
+
+        categoryRepository.save(category);
+        categoryRepository.save(category2);
+        categoryRepository.save(category3);
+
+        // 아이템 입력
+        Item item = Item.builder()
+                .name("TV")
+                .price(2500000)
+                .stockQuantity(15)
+                .build();
+        Item item2 = Item.builder()
+                .name("콩나물")
+                .price(3500)
+                .stockQuantity(250)
+                .build();
+        Item item3 = Item.builder()
+                .name("샴푸")
+                .price(18700)
+                .stockQuantity(38)
+                .build();
+
+        itemRepository.save(item);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+
+        CategoryItem categoryItem = CategoryItem.builder()
+                .category(category)
+                .item(item)
+                .build();
+        CategoryItem categoryItem2 = CategoryItem.builder()
+                .category(category2)
+                .item(item2)
+                .build();
+        CategoryItem categoryItem3 = CategoryItem.builder()
+                .category(category3)
+                .item(item3)
+                .build();
+
+        categoryItemRepository.save(categoryItem);
+        categoryItemRepository.save(categoryItem2);
+        categoryItemRepository.save(categoryItem3);
+    }
+
+    @Transactional
+    @Test
+    public void testReadCategoryItem() {
+        // Category Item을 조회해보자
+        CategoryItem categoryItem = categoryItemRepository.findById(1L).get();
+
+        System.out.println(categoryItem);
+        System.out.println(categoryItem.getCategory());
+        System.out.println(categoryItem.getItem());
+
+        Category category = categoryRepository.findById(1L).get();
+
+        category.getCategoryItems().forEach(item -> System.out.println(item.getItem()));
+    }
+
 }

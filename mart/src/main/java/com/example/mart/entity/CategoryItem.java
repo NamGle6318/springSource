@@ -2,6 +2,7 @@ package com.example.mart.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +19,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = { "item", "category" })
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class CategoryItem {
 
     //
     @Id
-    @Column(name = "CATEGORY_ID")
+    @Column(name = "CATEGORYITEM_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -38,12 +39,12 @@ public class CategoryItem {
     // 하나의 카테고리엔 여러개의 아이템이 존재할 수 있음
 
     // 하나의 카테고리에 여러개의 아이템이 있음
-    @ManyToOne
-    // @JoinColumn(name = "CATEGORY_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
     // 하나의 카테고리에 여러개의 아이템이 있음
-    @ManyToOne
-    // @JoinColumn(name = "ITEM_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ITEM_ID")
     private Item item;
 }
