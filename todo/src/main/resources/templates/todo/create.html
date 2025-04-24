@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout}">
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/list-groups.css}" />
+  </th:block>
+  <body>
+    <!-- <main class="container"> -->
+    <div layout:fragment="content">
+      <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+        <form method="post">
+          <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">todo</label>
+            <div class="col-sm-10">
+              <textarea name="content" id="content" rows="10" cols="50" class="form-control"> </textarea>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-sm-10 offset-sm-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="finished" name="finished" value="true" />
+                <label class="form-check-label" for="finished"> finished </label>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-10 offset-sm-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="importanted" name="importented" value="true" />
+                <label class="form-check-label" for="importented"> importented </label>
+              </div>
+            </div>
+          </div>
+          <a class="btn btn-primary" th:href="@{/todo/list}">목록</a>
+          <button type="submit" class="btn btn-success">생성</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

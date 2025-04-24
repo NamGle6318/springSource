@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{layouts/layout}">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <th:block layout:fragment="css">
-      <link rel="stylesheet" th:href="@{/css/list-groups.css}" />
-    </th:block>
-  </head>
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/list-groups.css}" />
+  </th:block>
+
   <body>
     <!-- <main class="container"> -->
+
     <div
       class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center"
       layout:fragment="content"
     >
+      <h1 th:if="${finished}">완료 List</h1>
+      <h1 th:unless="${finished}">미완료 List</h1>
+      <!-- th:title="${finished}" -->
+      <div>
+        <a th:href="@{/todo/list(finished=false)}" class="btn btn-success" th:if="${finished}">미완료 Todo 보기</a>
+        <a th:href="@{/todo/list(finished=true)}" class="btn btn-primary" th:unless="${finished}">완료 Todo 보기</a>
+      </div>
       <div class="list-group">
-        <label class="list-group-item d-flex gap-3">
+        <label class="list-group-item d-flex gap-3" th:each=" todoDTO : ${todoDTOList}" th:attr="data-id=${todoDTO.id}">
           <input
             class="form-check-input flex-shrink-0"
             type="checkbox"
-            value=""
-            checked=""
+            name="finished"
+            value="true"
+            th:checked="${todoDTO.finished}"
             style="font-size: 1.375em"
           />
           <span class="pt-1 form-checked-content">
-            <strong>Finish sales report</strong>
+            <a th:href="@{/todo/read(id=${todoDTO.id})}" title="todo 보러가기">
+              <strong th:text="${todoDTO.content}"> </strong>
+            </a>
+            <span class="badge text-bg-danger" th:if="${todoDTO.importanted}">중요</span>
             <small class="d-block text-body-secondary">
+              <!-- th:text="${#temporals.format(todoDTOList.createdDate, 'yyyy-MM-dd')}" -->
               <svg class="bi me-1" width="1em" height="1em" role="img" aria-label="Schedule">
                 <use xlink:href="#calendar-event"></use>
               </svg>
-              1:00–2:00pm
+              [[${#temporals.format(todoDTO.createdDate, 'yyyy-MM-dd')}]]
+              <!-- todoList.createdDate -->
             </small>
           </span>
         </label>
@@ -52,7 +62,14 @@
           </span>
         </label>
       </div>
+      <form th:action="@{/todo/modify}" method="post" id="actionForm">
+        <input type="hidden" name="id" value="" />
+        <input type="hidden" name="finished" value="" />
+      </form>
     </div>
-    <!-- </main> -->
+
+    <th:block layout:fragment="script">
+      <script th:src="@{/js/list.js}"></script>
+    </th:block>
   </body>
 </html>

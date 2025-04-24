@@ -23,7 +23,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final ModelMapper modelMapper;
 
-    public List<TodoDTO> findUnfinishedList(boolean finished) {
+    public List<TodoDTO> findfinishedList(boolean finished) {
         List<Todo> todoList = todoRepository.findByFinished(finished);
         // // 백 -> 프론트 = entity -> DTO
 
@@ -40,4 +40,26 @@ public class TodoService {
         return todoDTOList;
     }
 
+    // todo 체크시 완료됨으로 상태 변경하기
+    public Long changeFinished(TodoDTO todoDTO) {
+        // 해당 todo의 값을 check로 변경
+        Todo todo = todoRepository.findById(todoDTO.getId()).get();
+        todo.setFinished(todoDTO.isFinished()); // lombok boolean의 getter = is
+        return todoRepository.save(todo).getId();
+    }
+
+    public TodoDTO read(Long id) {
+        Todo todo = todoRepository.findById(id).get();
+
+        return modelMapper.map(todo, TodoDTO.class);
+    }
+
+    public void delete(Long id) {
+        todoRepository.deleteById(id);
+    }
+
+    public Long create(TodoDTO todoDTO) {
+        Todo todo = modelMapper.map(todoDTO, Todo.class);
+        return todoRepository.save(todo).getId();
+    }
 }
