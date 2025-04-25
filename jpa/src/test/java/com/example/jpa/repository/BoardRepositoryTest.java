@@ -1,5 +1,6 @@
 package com.example.jpa.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -53,5 +54,31 @@ public class BoardRepositoryTest {
     @Test
     public void deleteTest() {
         boardRepository.deleteById(2);
+    }
+
+    @Test
+    public void queryTest() {
+
+        // List<Board> boards = boardRepository.findByBnoGreaterThan(3L);
+        // List<Board> boards = boardRepository.findByWriterLike("정현우_");
+
+        // bno between 5 and 10
+
+        // List<Board> boards = boardRepository.findByBnoBetween(5L, 10L);
+        // List<Board> boards = boardRepository.findByBnoLessThanOrBnoGreaterThan(3L,
+        // 9L);
+        // List<Board> boards = boardRepository.findByBnoNotBnoBetween(3L, 9L);
+
+        // for (Board board : boards) {
+        // System.out.println(board);
+        // }
+
+        // System.out.println(boardRepository.findByWriter("정현우3"));
+        // System.out.println(boardRepository.findByWriterContaining("현"));
+
+        // System.out.println(boardRepository.hi(3L, 6L));
+        // System.out.println(boardRepository.findByBnoNotBetween(3L, 6L));
+        // System.out.println(boardRepository.findByBnoGreaterThan(3L));
+        System.out.println(boardRepository.findGo(3L, 9L));
     }
 }

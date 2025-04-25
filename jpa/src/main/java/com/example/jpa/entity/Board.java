@@ -36,7 +36,7 @@ public class Board {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq")
     @Id
-    private int bno;
+    private Long bno;
     @Column(length = 100, nullable = false)
     private String title;
     @Column(length = 2000, nullable = false)
