@@ -22,9 +22,15 @@
         <input type="text" class="form-control" id="price" name="price" th:value="${bookDTO.price}" />
       </div>
 
-      <a type="button" class="btn btn-primary" th:href="@{/book/modify(code=${bookDTO.code})}">수정</a>
+      <button type="submit" class="btn btn-primary">확인</button>
+      <button type="button" class="btn btn-danger">삭제</button>
       <a th:href="@{/book/list}" class="btn btn-success">취소</a>
     </form>
+    <form th:action="@{/book/remove}" method="post" id="actionForm">
+      <input type="hidden" name="code" th:value="${bookDTO.code}" />
+    </form>
   </div>
-  <th:block layout:fragment="script"> </th:block>
+  <th:block layout:fragment="script">
+    <script th:src="@{/js/modify.js}"></script>
+  </th:block>
 </html>

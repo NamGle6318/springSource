@@ -12,14 +12,15 @@
     />
     <th:block layout:fragment="css"> </th:block>
     <th:block layout:fragment="title"> </th:block>
+
     <link rel="stylesheet" th:href="@{/css/sticky-footer-navbar.css}" />
   </head>
   <body class="d-flex flex-column h-100">
     <div th:replace="~{fragments/header::header}"></div>
 
     <main class="flex-shrink-0">
-      <div layout:fragment="content">
-        <div class="container"></div>
+      <div class="container">
+        <div layout:fragment="content"></div>
       </div>
     </main>
 
