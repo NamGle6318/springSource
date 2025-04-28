@@ -1,6 +1,7 @@
 package com.example.mart.repository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -368,4 +369,51 @@ public class MartRepositoryTest {
         category.getCategoryItems().forEach(item -> System.out.println(item.getItem()));
     }
 
+    @Test
+    public void membersTest() {
+        List<Member> list = orderRepository.members();
+        System.out.println(list);
+    }
+
+    @Test
+    public void itemTest() {
+        List<Item> list = orderRepository.items();
+        System.out.println(list);
+    }
+
+    @Test
+    public void joinTest() {
+        List<Object[]> list = orderRepository.joinTest();
+        for (Object[] objects : list) {
+            System.out.println(Arrays.toString(objects)); // 인덱스 순으로 order, member, orderItem 들어있음
+
+            // objects 내 order, member, orderItem 형변환해서 담기
+            Order order = (Order) objects[0];
+            Member member = (Member) objects[1];
+            OrderItem orderItem = (OrderItem) objects[2];
+
+            System.out.println(order);
+            System.out.println(member);
+            System.out.println(orderItem);
+        }
+    }
+
+    @Test
+    public void subQueryTest() {
+        List<Object[]> list = orderRepository.subQueryTest();
+        for (Object[] objects : list) {
+            Order order = (Order) objects[0];
+            Member member = (Member) objects[1];
+            OrderItem orderItem = (OrderItem) objects[2];
+            Long orderCount = (Long) objects[3];
+            Integer orderSum = (Integer) objects[4];
+
+            System.out.println(order);
+            System.out.println(member);
+            System.out.println(orderItem);
+            System.out.println(orderCount);
+            System.out.println(orderSum);
+
+        }
+    }
 }

@@ -12,5 +12,10 @@ spring boot jpa에서 지원하는 sql
         2. :변수명
         3. @Param("변수명") annotation 사용
 3. queryDSL 이용 - 다른 라이브러리 도움받기
-    a. 레파지토리에  QuerydslPredicateExecutor<Entity class> 상속 
-    b. QEntity 인스턴스 불러오기
+    a. 레파지토리에  QuerydslPredicateExecutor<Entity class> - 인터페이스
+	- 간단한 곳에서 사용 편리함
+	- 조인이 불가능(left join 불가능)
+	- 복잡한 실무 환경에서는 사용하기에 한계가 명확
+    b. QuerydslRepositorySupport 사용 - 추상클래스
+	-  확장성 제공
+	- 조인 가능
