@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import com.example.jpa.entity.Board;
 
-public interface BoardRepository extends JpaRepository<Board, Integer> {
+public interface BoardRepository extends JpaRepository<Board, Integer>, QuerydslPredicateExecutor<Board> {
 
     // @Query("SELECT BOARD.BNO FROM BOARD WHERE TITLE LIKE 'title_'")
     // List<Board> findByTitle(String title);

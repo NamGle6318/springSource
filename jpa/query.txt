@@ -11,3 +11,6 @@ spring boot jpa에서 지원하는 sql
         1. (?1, ?2, ?3, ?n)
         2. :변수명
         3. @Param("변수명") annotation 사용
+3. queryDSL 이용 - 다른 라이브러리 도움받기
+    a. 레파지토리에  QuerydslPredicateExecutor<Entity class> 상속 
+    b. QEntity 인스턴스 불러오기
