@@ -97,8 +97,9 @@ public class QueryDslOrderRepositoryImpl extends QuerydslRepositorySupport imple
                 .groupBy(orderItem.order);
 
         JPQLQuery<Tuple> tuple = query.select(order, member, orderItem, orderCount, orderSum);
+        List<Tuple> result = tuple.fetch();
 
-        List<Object[]> list = tuple.stream().map(t -> t.toArray()).collect(Collectors.toList());
+        List<Object[]> list = result.stream().map(t -> t.toArray()).collect(Collectors.toList());
         return list;
     }
 
