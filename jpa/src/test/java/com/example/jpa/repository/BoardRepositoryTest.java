@@ -1,12 +1,17 @@
 package com.example.jpa.repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties.Jetty.Accesslog.FORMAT;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.example.jpa.entity.Board;
 
@@ -19,7 +24,7 @@ public class BoardRepositoryTest {
     @Test
     public void insertTest() {
 
-        IntStream.rangeClosed(1, 10).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
 
             Board board = Board.builder()
                     .title("title" + i)
@@ -48,7 +53,21 @@ public class BoardRepositoryTest {
 
     @Test
     public void listTest() {
-        boardRepository.findAll().forEach(System.out::println);
+        // boardRepository.findAll().forEach(System.out::println);
+        // Pageable onePage = PageRequest.of(0, 10, Sort.by("bno").descending());
+        // Pageable twoPage = PageRequest.of(1, 10, Sort.by("bno").descending());
+        // boardRepository.findAll(onePage).forEach(board -> System.out.println(board));
+        // boardRepository.findAll(twoPage).forEach(board -> System.out.println(board));
+
+        List<Object[]> boards = boardRepository.findByTitle2("title");
+        for (Object[] object : boards) {
+            System.out.println(Arrays.toString(object));
+            String title = (String) object[0];
+            String writer = (String) object[1];
+            System.out.println("title : " + title + " writer : " + writer);
+            System.out.println("------------------------------------------");
+
+        }
     }
 
     @Test
@@ -79,6 +98,7 @@ public class BoardRepositoryTest {
         // System.out.println(boardRepository.hi(3L, 6L));
         // System.out.println(boardRepository.findByBnoNotBetween(3L, 6L));
         // System.out.println(boardRepository.findByBnoGreaterThan(3L));
-        System.out.println(boardRepository.findGo(3L, 9L));
+        // System.out.println(boardRepository.findGo(3L, 9L));
+        System.out.println(boardRepository.findByWriter("정현우3"));
     }
 }

@@ -1,0 +1,13 @@
+spring boot jpa에서 지원하는 sql 
+1. JPA Query Method 사용
+    - 예약어를 사용하여 메소드 작성
+    - 메소드명이 너무 길어짐
+2. @Query annotation 사용
+    - 직접 원하는거 넣어서 해도 됨
+    - 기본적으로 sql문하고 거의 일치함
+      완전 일치시키려면 아래 형태로 작성하기
+          @Query(value = "select * from Board b where b.bno > ?1", nativeQuery = true)
+    - 파라메터를 설정하는 방법
+        1. (?1, ?2, ?3, ?n)
+        2. :변수명
+        3. @Param("변수명") annotation 사용

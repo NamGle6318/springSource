@@ -39,7 +39,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     // List<Board> findByBnoNotBnoBetween(Long start, Long end);
 
-    @Query("SELECT b FROM Board b WHERE b.writer = ?1")
+    @Query("SELECT b FROM Board b WHERE b.writer = :writer")
     List<Board> findByWriter(String writer);
 
     // @Query("select b from Board b where b.writer like %?1%")
@@ -55,4 +55,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     @Query("select b from Board b where b.bno not between ?1 and ?2")
     List<Board> findGo(Long start, Long stop);
+
+    @Query("SELECT b.title, b.writer FROM Board b WHERE b.title like %?1%")
+    List<Object[]> findByTitle2(String title);
 }
