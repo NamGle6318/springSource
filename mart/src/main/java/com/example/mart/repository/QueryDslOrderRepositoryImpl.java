@@ -75,6 +75,7 @@ public class QueryDslOrderRepositoryImpl extends QuerydslRepositorySupport imple
         QMember member = QMember.member;
         QOrder order = QOrder.order;
         QOrderItem orderItem = QOrderItem.orderItem;
+
         JPQLQuery<Order> query = from(order);
         query.join(member).on(order.member.eq(member));
         query.join(orderItem).on(order.eq(orderItem.order));

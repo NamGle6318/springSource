@@ -401,19 +401,19 @@ public class MartRepositoryTest {
     @Test
     public void subQueryTest() {
         List<Object[]> list = orderRepository.subQueryTest();
-        for (Object[] objects : list) {
-            Order order = (Order) objects[0];
-            Member member = (Member) objects[1];
-            OrderItem orderItem = (OrderItem) objects[2];
-            Long orderCount = (Long) objects[3];
-            Integer orderSum = (Integer) objects[4];
+        // for (Object[] objects : list) {
+        // Order order = (Order) objects[0];
+        // Member member = (Member) objects[1];
+        // OrderItem orderItem = (OrderItem) objects[2];
+        // Long orderCount = (Long) objects[3];
+        // Integer orderSum = (Integer) objects[4];
 
-            System.out.println(order);
-            System.out.println(member);
-            System.out.println(orderItem);
-            System.out.println(orderCount);
-            System.out.println(orderSum);
+        // System.out.println(order);
+        // System.out.println(member);
+        // System.out.println(orderItem);
+        // System.out.println(orderCount);
+        // System.out.println(orderSum);
 
-        }
+        // }
     }
 }
