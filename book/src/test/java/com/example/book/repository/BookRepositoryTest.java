@@ -5,6 +5,10 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.example.book.entity.Book;
 
@@ -46,5 +50,16 @@ public class BookRepositoryTest {
     @Test
     public void removeTest() {
         bookRepository.deleteById(20L);
+    }
+    // list를 페이지화
+
+    @Test
+    public void pageTest() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("code").descending());
+        // 페이지당 10개씩 27페이지(내림차순) 생성 후 1페이지 보여주기
+        Page<Book> result = bookRepository.findAll(pageable);
+        result.getContent().forEach(book -> System.out.println(book));
+        System.out.println("전체 행 개수 : " + result.getTotalElements());
+        System.out.println("전체 페이지 수 : " + result.getTotalPages());
     }
 }

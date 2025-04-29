@@ -22,8 +22,17 @@
         <input type="text" class="form-control" id="price" name="price" th:value="${bookDTO.price}" />
       </div>
 
-      <a type="button" class="btn btn-primary" th:href="@{/book/modify(code=${bookDTO.code})}">수정</a>
-      <a th:href="@{/book/list}" class="btn btn-success">취소</a>
+      <a
+        type="button"
+        class="btn btn-primary"
+        th:href="@{/book/modify(code=${bookDTO.code}, page=${pageRequestDTO.page}, size=${pageRequestDTO.size}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
+        >수정</a
+      >
+      <a
+        th:href="@{/book/list(code=${bookDTO.code}, page=${pageRequestDTO.page}, size=${pageRequestDTO.size}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
+        class="btn btn-success"
+        >취소</a
+      >
     </form>
   </div>
   <th:block layout:fragment="script"> </th:block>

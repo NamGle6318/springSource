@@ -3,6 +3,8 @@ package com.example.book.controller;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.book.dto.BookDTO;
+import com.example.book.dto.PageRequestDTO;
+import com.example.book.dto.PageResultDTO;
 import com.example.book.repository.BookRepository;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,41 +36,52 @@ public class bookController {
     private final BookService bookService;
 
     @GetMapping("/list")
-    public void getHome(Model model, RedirectAttributes rttr) {
-        log.info("book list 요청");
-        List<BookDTO> bookDTOs = bookService.readAll();
-        model.addAttribute("bookDTOs", bookDTOs);
-        model.addAttribute("num", rttr.getAttribute("num"));
+    public void getHome(Model model, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
+        log.info("page Request 요청 {}", pageRequestDTO);
+        PageResultDTO<BookDTO> pageResultDTO = bookService.readAll(pageRequestDTO);
+        model.addAttribute("result", pageResultDTO);
+
+        // model.addAttribute("num", rttr.getAttribute("num"));
 
     }
 
     @GetMapping({ "/read", "/modify" })
-    public void getRead(Long code, Model model) {
+    public void getRead(Long code, Model model, PageRequestDTO pageRequestDTO) {
         log.info("book get 요청 {} ", code);
         BookDTO bookDTO = bookService.read(code);
         model.addAttribute("bookDTO", bookDTO);
-
+        // GET -> MODIFY 동일경로로 이동시 데이터 자동으로 보내줌.
     }
 
     @PostMapping("/modify")
-    public String postModify(BookDTO bookDTO, RedirectAttributes rttr) {
+    public String postModify(BookDTO bookDTO, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
         log.info("Modify 요청 {} ", bookDTO);
         Long code = bookService.modify(bookDTO);
         log.info("Modify 변경 {} ", bookDTO);
         rttr.addAttribute("code", code);
 
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+
         return "redirect:/book/read";
     }
 
     @PostMapping("/remove")
-    public String postRemove(Long code) {
+    public String postRemove(Long code, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
         log.info("remove 요청 {} ", code);
         bookService.delete(code);
+
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
         return "redirect:/book/list";
     }
 
     @GetMapping("/create")
-    public void getCreate(BookDTO bookDTO) {
+    public void getCreate(BookDTO bookDTO, PageRequestDTO pageRequestDTO) {
         log.info("create 요청");
 
     }
