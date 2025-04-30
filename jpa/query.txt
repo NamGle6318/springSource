@@ -19,3 +19,4 @@ spring boot jpa에서 지원하는 sql
     b. QuerydslRepositorySupport 사용 - 추상클래스
 	-  확장성 제공
 	- 조인 가능
+    - Sort 객체 사용 불가
