@@ -36,4 +36,5 @@ public class Reply extends BaseEntity {
     @JoinColumn(name = "BOARD_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
+
 }
