@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout}">
+  <th:block layout:fragment="css">
+    <style>
+      ul {
+        padding-bottom: 1%;
+      }
+      textarea {
+        border: none;
+        outline: none;
+        resize: none;
+      }
+    </style>
+  </th:block>
+  <div layout:fragment="content">
+    <h1>일기 목록</h1>
+    <form action="" method="post">
+      <label for="date">날짜 선택:</label>
+      <input type="date" id="date" name="startDate" /> 시작일
+      <input type="date" id="date" name="endDate" /> 종료일
+      <input type="submit" class="btn btn-success" value="조회" />
+    </form>
+    <main>
+      <ul class="list-group" th:each="diarys : ${diarys}">
+        <li class="list-group-item" th:text="${diarys.title}">제목</li>
+        <li class="list-group-item" th:text="${diarys.createdDate}">작성일</li>
+        <li class="list-group-item">
+          <textarea th:text="${diarys.content}"></textarea>
+        </li>
+      </ul>
+    </main>
+  </div>
+</html>

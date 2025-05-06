@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout}">
+
+<style>
+  
+  textarea {
+    border: none;
+    outline: none;
+    resize: none;
+  }
+</style>
+  <div layout:fragment="content">
+    <h1>일기장 작성</h1>
+    <form method="post">
+        <div class="mb-3">
+          <label for="title" class="form-label">일기 제목</label>
+          <input type="text" class="form-control" id="title" name="title">
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">내용</label>
+          <textarea name="content" class="form-control" id="content" rows="15%" ></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">작성</button>
+      </form>
+    </div>
+
+</html>

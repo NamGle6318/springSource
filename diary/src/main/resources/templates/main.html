@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layouts/layout}">
+  <div layout:fragment="content">
+      <h1>Main화면</h1>
+    <main>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <a th:href="@{/list}">일기 목록</a>
+        </li>
+        <li class="list-group-item"><a th:href="@{/add}">일기 작성</a></li>
+        <li class="list-group-item">추가 예정</li>
+      </ul>
+    </main>
+  </div>
+</html>
