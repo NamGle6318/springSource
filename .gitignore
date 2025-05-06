@@ -8,6 +8,7 @@
 */mvnw
 *mvnw.cmd
 */.mvn/wrapper/maven-wrapper.properties
+school/*
 settings.json
 
 ### Java ###
