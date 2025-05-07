@@ -1,0 +1,22 @@
+rest의 mapping 방식
+    1. get : 조회
+    2. post : 생성
+    3. put/patch : 수정
+    4. delete : 삭제
+
+@RestController
+@DeleteMapping
+@PutMapping
+@PathVariable
+@RequestBody
+@ResponseBody
+
+ResponseEntity
+
+rest 방식은 springboot 에만 있는게 아님
+
+Rest :
+클라이언트에서 요청하고 서버에서 응답.
+클라이언트는 앱일수도, 모바일, 윈도우 등 다양한 환경일것임
+이 환경에 맞춰서 모든걸 수정하기보단 rest 방식을 채용하여
+데이터만을 주고받는 환경을 만든 것이 Rest

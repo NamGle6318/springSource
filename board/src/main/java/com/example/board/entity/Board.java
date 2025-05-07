@@ -23,7 +23,7 @@ import lombok.ToString;
 //#endregion
 
 @Getter
-@Setter
+
 @Builder
 @ToString(exclude = { "member", "replys" })
 @NoArgsConstructor
@@ -37,12 +37,15 @@ public class Board extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bno;
 
+    @Setter
     @Column(nullable = false)
     private String title;
 
+    @Setter
     @Column(nullable = false)
     private String content;
 
+    @Setter
     @JoinColumn(name = "MEMBER_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

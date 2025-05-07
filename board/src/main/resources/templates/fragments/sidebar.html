@@ -3,7 +3,7 @@
   <div class="border-end bg-white" id="sidebar-wrapper" th:fragment="sidebar">
     <div class="sidebar-heading border-bottom bg-light">Board</div>
     <div class="list-group list-group-flush">
-      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/board/list}">게시판</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/board/list(page=1,size=10,type=,keyword=)}">게시판</a>
       <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/board/create}"
         >게시글 작성</a
       >

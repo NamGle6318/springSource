@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.example.board.dto.PageRequestDTO;
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 import com.example.board.entity.Reply;
@@ -44,9 +45,9 @@ public class BoardRepositoryTest {
     public void insertBoardTest() {
         IntStream.rangeClosed(1, 50).forEach(i -> {
             Board board = Board.builder()
-                    .title("재밋는 만화" + i + "편")
+                    .title("맛있는 만화" + i + "편")
                     .content(i + "컷 만화")
-                    .member(memberRepository.findById("test2" + "@gmail.com").get())
+                    .member(memberRepository.findById("test1" + "@gmail.com").get())
                     .build();
             boardRepository.save(board);
 
@@ -98,9 +99,16 @@ public class BoardRepositoryTest {
 
     @Test
     public void selectTest() {
+        PageRequestDTO poagRequestDTO = PageRequestDTO.builder()
+        .page(0)
+        .size(0)
+        .type("tc")
+        .keyword("title")
+        .build();
+
         Pageable pageable = PageRequest.of(1, 10, Sort.by("bno").descending());
 
-        Page<Object[]> result = boardRepository.list(pageable);
+        Page<Object[]> result = boardRepository.list(poagRequestDTO.getType(), poagRequestDTO.getKeyword(),pageable);
 
         for (Object[] objects : result) {
             System.out.println(Arrays.toString(objects));
