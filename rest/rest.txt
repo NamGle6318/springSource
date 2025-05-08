@@ -6,17 +6,27 @@ rest의 mapping 방식
 
 @RestController
 @DeleteMapping
-@PutMapping
-@PathVariable
-@RequestBody
-@ResponseBody
+@PutMapping : 
+@PathVariable : 경로에 들어있는 값 매개변수에 담기
+@RequestBody : Json => 자바 객체 연동
+@ResponseBody : 컨트롤러에서 반환하는 값은 데이터임을 명시
 
-ResponseEntity
+ResponseEntity : data + 상태 코드
+    return new ResponseEntity(HttpStatus.(OK, BadStatus, ...)); 반환시 해당 코드로 넘어가짐
 
 rest 방식은 springboot 에만 있는게 아님
 
 Rest :
 클라이언트에서 요청하고 서버에서 응답.
 클라이언트는 앱일수도, 모바일, 윈도우 등 다양한 환경일것임
-이 환경에 맞춰서 모든걸 수정하기보단 rest 방식을 채용하여
-데이터만을 주고받는 환경을 만든 것이 Rest
+이 환경에 맞춰서 모든컨트롤러를 생성하기 보단 rest 방식을 채용하여
+데이터만을 주고받는 환경을 만든 것 = 서버에서는 데이터만 보내는 Rest 만 만들면 되고, 
+프론트별로 다 알아서 데이터 받아 쓰면 됨
+
+
+CORS(Cross Origin Resource Sharing) 에러
+
+서버 : localhost:8080
+클라이언트 : localhost:5500, localhost:5173, ... 
+요청과 응답의 포트번호가 서로 다를 경우 브라우저에서 막아버림
+-> 이를 해결하기 위해 CorsRegistry 클래스를 이용하여 허용시켜줌

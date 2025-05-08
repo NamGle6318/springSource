@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 public class SampleController {
 
-    @GetMapping("/")
-    public String getTest1() {
-        return "Hello"; // return 한게 컨트롤러와 달리 데이터로써 파일의 위치가 아닌 받아들여짐
-    }
+    // @GetMapping("/")
+    // public String getTest1() {
+    // return "Hello"; // return 한게 컨트롤러와 달리 데이터로써 파일의 위치가 아닌 받아들여짐
+    // }
 
     // 자바 객체는 브라우저에서 해석 불가
     // Jackson 라이브러리가 중간에서 작업 중 (Java 객체 -> JSON)
@@ -70,8 +70,8 @@ public class SampleController {
     @GetMapping("/sample4/{cat}/{pid}")
     public ResponseEntity<String[]> check2(@PathVariable String cat, @PathVariable String pid) {
         String arr[] = {
-            "category : " + cat, 
-            "productId : " + pid // category : shirt, productID : 1234  로 받아짐
+                "category : " + cat,
+                "productId : " + pid // category : shirt, productID : 1234 로 받아짐
         };
 
         return new ResponseEntity<>(arr, HttpStatus.OK);

@@ -57,10 +57,11 @@ public class MemoController {
     }
 
     @PutMapping("/update")
-    public Long postUpdate(@RequestBody MemoDTO memoDTO) { // 웹에 JSON으로 보이게 해주는 JACKSON은 put할땐 자동으로 안해줌 어노테이션 해야함
+    public Long postUpdate(@RequestBody MemoDTO memoDTO) { // 웹에 JSON으로 보이게 해주는 JACKSON은 put할땐 자동으로 안해줌 어노테이션 해야함 =
+                                                           // @RequestBody
         log.info(memoDTO);
         Long mno = memoService.memoUpdate(memoDTO);
-        
+
         return mno;
     }
 
@@ -74,8 +75,6 @@ public class MemoController {
     @PostMapping("/new")
     public Long postNew(@RequestBody MemoDTO memoDTO) {
         Long mno = memoService.memoCreate(memoDTO);
-        
-        
 
         // 사용자 입력값 가져오기
         // 1. DTO

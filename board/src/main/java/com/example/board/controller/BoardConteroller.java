@@ -58,15 +58,16 @@ public class BoardConteroller {
     }
 
     @PostMapping("/create")
-    public String postCreate(@ModelAttribute("dto") @Valid BoardDTO dto, BindingResult result, PageRequestDTO pageRequestDTO,
+    public String postCreate(@ModelAttribute("dto") @Valid BoardDTO dto, BindingResult result,
+            PageRequestDTO pageRequestDTO,
             RedirectAttributes rttr) {
         log.info("글 작성 요청 {}", dto);
-        
+
         if (result.hasErrors()) {
             return "/board/create";
         }
-        
-        // boardService.create(dto);
+
+        boardService.create(dto);
 
         rttr.addAttribute("page", pageRequestDTO.getPage());
         rttr.addAttribute("size", pageRequestDTO.getSize());

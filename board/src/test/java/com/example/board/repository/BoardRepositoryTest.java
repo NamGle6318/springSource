@@ -30,6 +30,12 @@ public class BoardRepositoryTest {
     private ReplyRepository replyRepository;
 
     @Test
+    public void listReplyTest() {
+        List<Reply> list = replyRepository.findByBoardOrderByRno(boardRepository.findById(94L).get());
+        System.out.println(list);
+    }
+
+    @Test
     public void insertMemberTest() {
         IntStream.rangeClosed(1, 10).forEach(i -> {
             Member member = Member.builder()
@@ -100,15 +106,15 @@ public class BoardRepositoryTest {
     @Test
     public void selectTest() {
         PageRequestDTO poagRequestDTO = PageRequestDTO.builder()
-        .page(0)
-        .size(0)
-        .type("tc")
-        .keyword("title")
-        .build();
+                .page(0)
+                .size(0)
+                .type("tc")
+                .keyword("title")
+                .build();
 
         Pageable pageable = PageRequest.of(1, 10, Sort.by("bno").descending());
 
-        Page<Object[]> result = boardRepository.list(poagRequestDTO.getType(), poagRequestDTO.getKeyword(),pageable);
+        Page<Object[]> result = boardRepository.list(poagRequestDTO.getType(), poagRequestDTO.getKeyword(), pageable);
 
         for (Object[] objects : result) {
             System.out.println(Arrays.toString(objects));
@@ -121,4 +127,5 @@ public class BoardRepositoryTest {
         Object[] board = boardRepository.getBoardByBno(5L);
         System.out.println(Arrays.toString(board));
     }
+
 }

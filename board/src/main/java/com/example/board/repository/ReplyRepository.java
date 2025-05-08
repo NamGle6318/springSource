@@ -16,4 +16,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     @Modifying // delete, update query문일시 무조건 사용해야 함
     @Query("DELETE FROM Reply r WHERE r.board.bno = :bno")
     void deleteByBoardBno(Long bno);
+
+    // 특정 글 조회시 달려있는 댓글 모두 가져오기
+    List<Reply> findByBoardOrderByRno(Board board);
 }
