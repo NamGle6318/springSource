@@ -29,11 +29,22 @@
     </form>
 
     <div class="mb-3">
-      <h5 class="my-3">댓글개수 : [[${dto.replyCount}]]</h5>
+      <h5 class="my-3">댓글개수 : <span th:text="${dto.replyCount}" class="cnt"></span></h5>
 
+      <form action="" class="replyForm" method="post">
+        <input type="hidden" name="rno" />
+        <input type="hidden" name="bno" th:value="${dto.bno}" />
+        <div class="input-group mb-3">
+          <span class="input-group-text">작성자</span>
+          <input type="text" name="replyer" class="form-control" id="replyer" />
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">댓글</span>
+          <textarea type="text" name="text" class="form-control" id="text" aria-label="With textarea" z> </textarea>
+          <input type="submit" value="등록" />
+        </div>
+      </form>
       <div class="replyList boarder px-2">
-        <!-- 댓글 목록 -->
-
         <div class="d-flex justify-content-between my-2 border-bottom reply-row" data-rno="1">
           <div class="p-3">
             <img
