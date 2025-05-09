@@ -1,0 +1,33 @@
+Spring security 
+- 현재 프로젝트는 시큐리티 설정에 의해 움직임
+
+  filter를 통과해야 컨트롤러로 넘어감
+
+  로그인 정보 없이는 모든 페이지 접근 불가
+  익명사용자(Anonymous User) - 로그인 실패?
+  인증사용자(Authentication User) - 로그인 후 
+  username : security에서 초기 설정해둔 아이디임
+
+  - 비밀번호 암호화
+    단방향 암호화 : 한번 암호화를 하게 되면 암호화 된 비밀번호의 원본은 찾을 수 없음.
+
+
+- 주요 메소드
+  permitAll() : 권한 필요 없음
+  authenticated() : 권한(로그인 성공 후 부여되는 권한) 필요 함
+
+- 로그인 페이지 패턴
+  id에 해당하는 요소의 이름 = username (security 기본값, 변경가능)
+  사용자의 로그인 페이지를 사용하려면  .formLogin(login -> login.loginPage("/member/login").permitAll());
+  로그인페이지의 post 컨트롤러는 작업하지 않음 => Security가 처리
+  => get을 제외한 모든 방법(put, post, delete)은 csrf토큰을 요구 = csrf 토큰 검증을 하겠다
+     security가 적용되 있는 thymeleaf에서는 form의 th:action에 경로를 작성시 csrf 토큰을 자동으로 넣어줌 
+     예시 : <form th:action="@{주소}"><input type="hidden" name="_csrf" value="7oqFWeiqC3N0uV9wOd17ZgqFf0DzmYB9fHamLJHFFJpE4I8J1unka4rOPUtZimhGD_BPBDyxUnnCrbJQSELDGfOgdaki0b1s"></form>
+  로그인 성공 후 이동할 경로를 지정하지 않으면 이전 URL로 되돌아감
+
+  로그인 처리를 위한 Service는 만들어야 함 : 단 UserDetailsService를 구현해야함 ClubMemberDetailsService 참고
+
+- csrf란 (Cross Site Request Forgery)
+  : 사이트간 요청 위조의 줄임말로, 웹 취약점 중 하나
+    공격자가 대상의 권한을 도용하여 특정 웹 사이트 기능을 실행 가능하게 할 수 있음.
+    ex : 인스타, 페북 등의 사이트에 광고성 혹은 유해한 게시글 업로드가 가능해짐
