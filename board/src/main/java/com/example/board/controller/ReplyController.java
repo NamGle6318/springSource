@@ -36,7 +36,7 @@ public class ReplyController {
 
     @GetMapping("/{rno}")
     public ReplyDTO getReply(@PathVariable Long rno) {
-
+        
         return replyService.select(rno);
     }
 

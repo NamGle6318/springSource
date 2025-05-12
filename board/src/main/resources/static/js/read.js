@@ -1,15 +1,23 @@
 // 보드를 읽으러 들어가면 해당 보드의 댓글들 불러오기
 
-// 형태
+// axios()형태
 // axios.get().then().catch().finally();
 // axios.post().then().catch().finally();
 // axios.put().then().catch().finally();
 // axios.delete().then().catch().finally();
 
-// date
-
 // replyForm
 const replyForm = document.querySelector(".replyForm");
+
+// 현재 접속중인 user's Email
+const currentUserEmail = document.querySelector("meta[name=current-user-email]");
+// 현재 접속중인 user's RoleType의 값
+const currentUserRoleType = document.querySelector("meta[name=current-user-roleType]");
+const UserRoleTypeValues = currentUserRoleType.getAttribute("roleType");
+// User ROLETYPE 확인
+const checkRoleType = UserRoleTypeValues.includes("ROLE_ADMIN") || UserRoleTypeValues.includes("ROLE_MANAGER");
+
+
 // 댓글창 출력
 const replyList = () => {
   axios.get(`/replies/board/${bno}`).then((res) => {
@@ -33,8 +41,10 @@ const replyList = () => {
         date.getMinutes()
       );
     };
-
+    // 댓글 리스트 출력 html
     data.forEach((reply) => {
+      
+      
       result += ` <div class="d-flex justify-content-between my-2 border-bottom reply-row" data-rno="${reply.rno}">`;
       result += `<div class="p-3">`;
       result += `<img
@@ -45,15 +55,17 @@ const replyList = () => {
               />`;
       result += `</div>`;
       result += `<div class="flex-grow-1 align-self-center">`;
-      result += `<div>${reply.replyer}</div>`;
+      result += `<div>${reply.replyerName}</div>`;
       result += `<div><span class="fs-5">${reply.text}</span></div>`;
       result += `<div class="text-muted"><span class="small">${formatDate(reply.createdDate)}</span></div>`;
       result += `</div>`;
       result += `<div class="d-flex flex-column align-self-center">`;
       result += `<div class="mb-2">`;
-      result += `<button class="btn btn-outline-danger btn-sm">삭제</button>`;
-      result += `</div>`;
-      result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`;
+      if (currentUserEmail.content == reply.replyerEmail || checkRoleType) {
+        result += `<button class="btn btn-outline-danger btn-sm">삭제</button>`; 
+        result += `</div>`;
+        result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`; 
+      }
       result += `</div></div></div></div>`;
     });
 
@@ -117,7 +129,7 @@ document.querySelector(".replyList").addEventListener("click", (e) => {
   if (btn.classList.contains("btn-outline-danger")) {
     if (!confirm("정말로 삭제하시겠습니까?")) return;
 
-    axios.delete(`/replies/${rno}`).then((res) => {
+    axios.delete(`/replies/${ rno}`).then((res) => {
       //삭제 후 댓글 리로드
     });
     replyList();
@@ -126,9 +138,9 @@ document.querySelector(".replyList").addEventListener("click", (e) => {
 
     axios.get(`/replies/${rno}`).then((res) => {
       const data = res.data;
-
+    
       replyForm.rno.value = data.rno;
-      replyForm.replyer.value = data.replyer;
+      replyForm.replyer.value = data.replyerName;
       replyForm.text.value = data.text;
     });
   }

@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{layouts/layout}">
+  <th:block layout:fragment="etc">
+    <meta name="current-user-email" th:content="${#authentication.name}" />
+    <meta name="current-user-roleType" th:roleType="${#authentication.authorities}">
+  </th:block>
   <div class="container-fluid" layout:fragment="content">
     <h1>Board Read</h1>
     <form>
@@ -23,6 +27,7 @@
       <a
         class="btn btn-primary"
         th:href="@{modify(bno=${boardDTO.bno},page=${pageRequestDTO.page},size=${pageRequestDTO.size},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
+        th:if="${#authentication.name == dto.email}"
         >수정</a
       >
       <a class="btn btn-success">목록</a>

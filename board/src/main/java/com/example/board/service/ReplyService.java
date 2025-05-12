@@ -3,6 +3,10 @@ package com.example.board.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.board.dto.ReplyDTO;
@@ -23,7 +27,7 @@ public class ReplyService {
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
 
-    // 특정 보드의 댓글 검색
+    // 특정 보드의 댓글들 검색
     public List<ReplyDTO> getList(Long bno) {
 
         Board board = boardRepository.findById(bno).get();
@@ -93,5 +97,24 @@ public class ReplyService {
 
         return reply;
     }
+
+    // 해당 계정의 권한이 매니저, 어드민 or 해당 페이지를 소유중일 경우 true를 반환하는 서비스
+    // 해당 서비스를 사용하는 곳 댓글 수정과 삭제, 게시글 수정과 삭제
+    public boolean hasAccess(ReplyDTO replyDTO) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+
+        // 해당 계정의 roleType이 ROLE_ADMIN or ROLE_MANAGER 여부 확인
+        boolean hasRoleTypeAccess = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ROLE_ADMIN") || role.equals("ROLE_MANAGER"));
+
+        // 현재 계정의 email과 접근하려는 entity의 이메일 일치 여부 확인
+        boolean hasEmailAccess = replyDTO.getReplyerEmail().equals(authentication.getName());
+
+        return hasRoleTypeAccess || hasEmailAccess;
+    }
+
+    // TODO : hasAccess 로 댓글 수정과 삭제, 게시글 수정과 삭제를 제한하는 기능 추가해야함
 
 }
