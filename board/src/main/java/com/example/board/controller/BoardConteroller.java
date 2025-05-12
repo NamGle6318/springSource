@@ -1,7 +1,6 @@
 package com.example.board.controller;
 
-import java.util.List;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,19 +10,18 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.board.dto.BoardDTO;
 import com.example.board.dto.PageRequestDTO;
 import com.example.board.dto.PageResultDTO;
-import com.example.board.entity.Board;
+
 import com.example.board.service.BoardService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -52,11 +50,14 @@ public class BoardConteroller {
     // public void getCreate(BoardDTO dto) {
     // log.info("글 작성 풀 요청");
     // }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public void getCreate(@ModelAttribute("dto") BoardDTO dto, PageRequestDTO pageRequestDTO) {
         log.info("글 작성 풀 요청 {}", dto);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String postCreate(@ModelAttribute("dto") @Valid BoardDTO dto, BindingResult result,
             PageRequestDTO pageRequestDTO,
@@ -77,6 +78,7 @@ public class BoardConteroller {
         return "redirect:/board/list";
     }
 
+    @PreAuthorize("authentication.name = #dto.email")
     @PostMapping("/modify")
     public String postModify(BoardDTO dto, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
         log.info("수정 {} {}", dto, pageRequestDTO);

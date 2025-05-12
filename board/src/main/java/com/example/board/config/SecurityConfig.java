@@ -1,22 +1,22 @@
-package com.example.security.config;
+package com.example.board.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices.RememberMeTokenAlgorithm;
+
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.example.security.security.CustomLoginSuccessHandler;
+import com.example.board.security.CustomLoginSuccessHandler;
+
+// import com.example.security.security.CustomLoginSuccessHandler;
 
 @Configuration // 환경설정 파일 어노테이션
 @EnableWebSecurity
@@ -24,7 +24,7 @@ import com.example.security.security.CustomLoginSuccessHandler;
 public class SecurityConfig {
 
         @Bean
-        SecurityFilterChain securityFilterChain(HttpSecurity http, RememberMeServices rememberMeServices)
+        SecurityFilterChain securityFilterChain(HttpSecurity http)
                         throws Exception {
 
                 // @EnableMethodSecurity 어노테이션 적용 전
@@ -41,7 +41,7 @@ public class SecurityConfig {
 
                 // @EnableMethodSecurity 어노테이션 적용 후
                 http
-                                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/").permitAll()
+                                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/board/list").permitAll()
                                                 .requestMatchers("/css/**", "/js/**", "/image/**").permitAll()
                                                 .anyRequest().permitAll())
                                 .formLogin(login -> login.loginPage("/member/login")
@@ -51,11 +51,9 @@ public class SecurityConfig {
                 http
                                 .logout(logout -> logout
                                                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                                                .logoutSuccessUrl("/"))
-                                .oauth2Login(Customizer.withDefaults())
-                                .oauth2Login(login -> login.successHandler(successHandler()));
+                                                .logoutSuccessUrl("/"));
 
-                http.rememberMe(remember -> remember.rememberMeServices(rememberMeServices));
+                // http.rememberMe(remember -> remember.rememberMeServices(rememberMeServices));
 
                 return http.build();
         }
@@ -90,14 +88,16 @@ public class SecurityConfig {
                 return new CustomLoginSuccessHandler();
         }
 
-        // 아이디 비밀번호 기억하기
-        @Bean
-        RememberMeServices rememberMeServices(UserDetailsService userDetailsService) {
-                RememberMeTokenAlgorithm encodingAlgorithm = RememberMeTokenAlgorithm.SHA256;
-                TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices("myKey",
-                                userDetailsService, encodingAlgorithm);
-                rememberMeServices.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
-                rememberMeServices.setTokenValiditySeconds(60 * 60 * 24 * 7); // 7일
-                return rememberMeServices;
-        }
+        // // 아이디 비밀번호 기억하기
+        // @Bean
+        // RememberMeServices rememberMeServices(UserDetailsService userDetailsService)
+        // {
+        // RememberMeTokenAlgorithm encodingAlgorithm = RememberMeTokenAlgorithm.SHA256;
+        // TokenBasedRememberMeServices rememberMeServices = new
+        // TokenBasedRememberMeServices("myKey",
+        // userDetailsService, encodingAlgorithm);
+        // rememberMeServices.setMatchingAlgorithm(RememberMeTokenAlgorithm.MD5);
+        // rememberMeServices.setTokenValiditySeconds(60 * 60 * 24 * 7); // 7일
+        // return rememberMeServices;
+        // }
 }

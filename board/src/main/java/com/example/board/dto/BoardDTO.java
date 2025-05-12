@@ -2,8 +2,6 @@ package com.example.board.dto;
 
 import java.time.LocalDateTime;
 
-import com.example.board.entity.Member;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -31,8 +29,6 @@ public class BoardDTO {
     private LocalDateTime updatedDate;
 
     // member 정보
-    @Email(message = "이메일 형식을 확인해 주세요")
-    @NotBlank(message = "이메일을 입력해 주세요")
     private String email;
     private String name;
 

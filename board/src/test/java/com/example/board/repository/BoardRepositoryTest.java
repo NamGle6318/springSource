@@ -49,11 +49,13 @@ public class BoardRepositoryTest {
 
     @Test
     public void insertBoardTest() {
-        IntStream.rangeClosed(1, 50).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
+            long mId = (int) (Math.random() * 10) + 1;
+            Member member = memberRepository.findById("user" + mId + "@gmail.com").get();
             Board board = Board.builder()
                     .title("맛있는 만화" + i + "편")
                     .content(i + "컷 만화")
-                    .member(memberRepository.findById("test1" + "@gmail.com").get())
+                    .member(member)
                     .build();
             boardRepository.save(board);
 
@@ -64,10 +66,14 @@ public class BoardRepositoryTest {
     public void insertReplyTest() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
             long bno = (int) (Math.random() * 100) + 1;
+
+            long mId = (int) (Math.random() * 10) + 1;
+            Member member = memberRepository.findById("user" + mId + "@gmail.com").get();
+
             Board board = boardRepository.findById(bno).get();
             Reply reply = Reply.builder()
                     .text("댓글" + i)
-                    .replyer("guest" + i)
+                    .replyer(member)
                     .board(board)
                     .build();
             replyRepository.save(reply);

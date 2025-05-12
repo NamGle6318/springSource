@@ -31,16 +31,22 @@
     <div class="mb-3">
       <h5 class="my-3">댓글개수 : <span th:text="${dto.replyCount}" class="cnt"></span></h5>
 
-      <form action="" class="replyForm" method="post">
+      <form class="replyForm" method="post">
         <input type="hidden" name="rno" />
         <input type="hidden" name="bno" th:value="${dto.bno}" />
         <div class="input-group mb-3">
           <span class="input-group-text">작성자</span>
-          <input type="text" name="replyer" class="form-control" id="replyer" />
+          <input
+            type="text"
+            name="replyer"
+            class="form-control"
+            id="replyer"
+            th:value="${#authentication.principal.name}"
+          />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">댓글</span>
-          <textarea type="text" name="text" class="form-control" id="text" aria-label="With textarea" z> </textarea>
+          <textarea type="text" name="text" class="form-control" id="text" aria-label="with textarea"> </textarea>
           <input type="submit" value="등록" />
         </div>
       </form>
@@ -62,10 +68,10 @@
           </div>
           <div class="d-flex flex-column align-self-center">
             <div class="mb-2">
-              <button class="btn btn-outline-danger btn-sm">삭제</button>
+              <button class="btn btn-outline-danger btn-sm" th:if="${#authentication.name == dto.email}">삭제</button>
             </div>
             <div>
-              <button class="btn btn-outline-success btn-sm">수정</button>
+              <button class="btn btn-outline-success btn-sm" th:if="${#authentication.name == dto.email}">수정</button>
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.board.dto.ReplyDTO;
 import com.example.board.entity.Board;
+import com.example.board.entity.Member;
 import com.example.board.entity.Reply;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.ReplyRepository;
@@ -71,7 +72,8 @@ public class ReplyService {
         ReplyDTO replyDTO = ReplyDTO.builder()
                 .rno(reply.getRno())
                 .text(reply.getText())
-                .replyer(reply.getReplyer())
+                .replyerName(reply.getReplyer().getName())
+                .replyerEmail(reply.getReplyer().getEmail())
                 .bno(reply.getBoard().getBno())
                 .createdDate(reply.getCreatedDate())
                 .updatedDate(reply.getUpdatedDate())
@@ -85,7 +87,7 @@ public class ReplyService {
         Reply reply = Reply.builder()
                 .rno(replyDTO.getRno())
                 .text(replyDTO.getText())
-                .replyer(replyDTO.getReplyer())
+                .replyer(Member.builder().email(replyDTO.getReplyerEmail()).build())
                 .board(board)
                 .build();
 

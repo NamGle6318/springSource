@@ -3,7 +3,6 @@ package com.example.security.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

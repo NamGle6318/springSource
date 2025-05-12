@@ -2,8 +2,6 @@ package com.example.board.dto;
 
 import lombok.Data;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
