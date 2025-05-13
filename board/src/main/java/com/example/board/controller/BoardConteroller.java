@@ -22,6 +22,7 @@ import com.example.board.service.BoardService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -96,6 +97,19 @@ public class BoardConteroller {
 
         // 삭제
         boardService.delete(dto.getBno());
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+        return "redirect:/board/list";
+    }
+
+    // 로그인 사용자 == 작성자
+    @PreAuthorize("authentication.name == #email")
+    @PostMapping("/remove")
+    public String postRemove(Long bno, String email, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
+        boardService.delete(bno);
+
         rttr.addAttribute("page", pageRequestDTO.getPage());
         rttr.addAttribute("size", pageRequestDTO.getSize());
         rttr.addAttribute("type", pageRequestDTO.getType());

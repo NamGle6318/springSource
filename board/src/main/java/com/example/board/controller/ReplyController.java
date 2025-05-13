@@ -2,6 +2,7 @@ package com.example.board.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
+    @PreAuthorize("permitAll")
     @GetMapping("/board/{bno}")
     public List<ReplyDTO> getList(@PathVariable Long bno) {
         log.info("bno 댓글 요청 {}", bno);
@@ -36,27 +38,29 @@ public class ReplyController {
 
     @GetMapping("/{rno}")
     public ReplyDTO getReply(@PathVariable Long rno) {
-        
+
         return replyService.select(rno);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/new")
     public Long postReply(@RequestBody ReplyDTO replyDTO) {
         Long rno = replyService.create(replyDTO);
-
         return rno;
     }
 
+    @PreAuthorize("authentication.name == #replyDTO.replyerEmail")
     @PutMapping("/{rno}")
     public Long putReply(@PathVariable Long rno, @RequestBody ReplyDTO replyDTO) {
         return replyService.update(replyDTO);
     }
 
+    @PreAuthorize("authentication.name == #replyDTO.replyerEmail")
     @DeleteMapping("/{rno}")
-    public Long deleteReply(@PathVariable Long rno) {
-        ReplyDTO replyDTO = replyService.select(rno);
+    public Long deleteReply(@PathVariable Long rno, @RequestBody ReplyDTO replyDTO) {
+        // ReplyDTO replyDTO = replyService.select(rno);
 
-        return replyService.delete(replyDTO);
+        return replyService.delete(rno);
 
     }
 

@@ -51,6 +51,7 @@ public class ReplyService {
 
     public Long create(ReplyDTO replyDTO) {
         Reply reply = dtoToEntity(replyDTO);
+        log.info("replyDTO2--------------- {}", replyDTO);
         replyRepository.save(reply);
 
         return reply.getRno();
@@ -66,7 +67,9 @@ public class ReplyService {
     }
 
     // 댓글 삭제
-    public Long delete(ReplyDTO replyDTO) {
+    public Long delete(Long rno) {
+        Reply reply = replyRepository.findById(rno).get();
+        ReplyDTO replyDTO = entityToDto(reply);
         replyRepository.deleteById(replyDTO.getRno());
 
         return replyDTO.getRno();

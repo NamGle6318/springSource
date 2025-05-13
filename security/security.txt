@@ -33,4 +33,24 @@ Spring security
     ex : 인스타, 페북 등의 사이트에 광고성 혹은 유해한 게시글 업로드가 가능해짐
 
 403 에러 
-csrf 값 확인 : form action 값 적었는지 확이
+csrf 값 확인 : form action 값 적었는지 확인
+	axions, fetch => headers 에 값 추가했는지 확인
+
+- thymeleaf security
+	- value = ${#authentication.principal.name} : 
+	- sec:authorize="hasAnyRole({'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'})"
+		hasAnyRole('role~') : 여러개의 롤 중 하나라도 만족한다면
+		hasRole('role~') : 1-1 만족 => ex. sec:authorize="hasRole('ROLE_ADMIN')"
+	- sec:authentication="name" : id 가져오기
+	- sec:authentication="principal.authorities" : 권한 가져오기
+
+
+security 접근 제어 방식
+	1. Controller 에서 @PreAuthorize 사용
+	2. Security 의 FilterChain 관련 메소드에서 requestMatchers("주소").permitAll()로 허용하기
+
+실무
+서버 : 스프링부트
+화면 : 프로젝트마다 다름 (jsp[레거시 프로젝트], 템플릿(thymeleaf, ...), react
+
+jsp는 thymeleaf와 유사, 스프링부트에서는 jsp는 기본 템플릿이 아님 => 설정 작업 필요

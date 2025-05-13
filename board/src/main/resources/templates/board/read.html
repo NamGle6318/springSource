@@ -35,20 +35,24 @@
 
     <div class="mb-3">
       <h5 class="my-3">댓글개수 : <span th:text="${dto.replyCount}" class="cnt"></span></h5>
-
       <form class="replyForm" method="post">
         <input type="hidden" name="rno" />
         <input type="hidden" name="bno" th:value="${dto.bno}" />
+        <input type="hidden" name="replyerEmail"
+        sec:authorize="hasAnyRole({'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'})"
+        th:value="${#authentication.principal.username}" />
         <div class="input-group mb-3">
           <span class="input-group-text">작성자</span>
           <input
             type="text"
-            name="replyer"
+            name="replyerName"
             class="form-control"
             id="replyer"
-            th:value="${#authentication.principal.name}"
+            th:value="${#authorization.expression('hasRole(''ANONYMOUS'')') ? 'guest' : #authentication.principal.name}"
           />
         </div>
+        <!-- <span sec:authentication="name"></span>
+        <span sec:authentication="principal.authorities"></span> -->
         <div class="input-group mb-3">
           <span class="input-group-text">댓글</span>
           <textarea type="text" name="text" class="form-control" id="text" aria-label="with textarea"> </textarea>
@@ -87,6 +91,8 @@
   <th:block layout:fragment="script">
     <script>
       const bno = "[[${dto.bno}]]";
+      const loginUser = "[[${#authentication.name}]]";
+      const csrf = "[[${_csrf.token}]]"
     </script>
     <script th:src="@{/js/read.js}"></script>
   </th:block>

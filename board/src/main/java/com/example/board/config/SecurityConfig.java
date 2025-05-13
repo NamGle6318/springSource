@@ -41,9 +41,17 @@ public class SecurityConfig {
 
                 // @EnableMethodSecurity 어노테이션 적용 후
                 http
-                                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/board/list").permitAll()
-                                                .requestMatchers("/css/**", "/js/**", "/image/**").permitAll()
-                                                .anyRequest().permitAll())
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers("/css/**", "/js/**",
+                                                                "/img/**", "/icon/**")
+                                                .permitAll()
+                                                .requestMatchers("/board/list", "/board/read", "/member/register",
+                                                                "/replies/board/**")
+                                                .permitAll()
+                                                // .requestMatchers(/board/modify") .authenticated()
+                                                .requestMatchers("/board/modify")
+                                                .hasAnyRole("ADMIN", "MANAGER", "USER", "ANOYMOUS")
+                                                .anyRequest().authenticated())
                                 .formLogin(login -> login.loginPage("/member/login")
                                                 .successHandler(successHandler())
                                                 .permitAll());

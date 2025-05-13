@@ -46,4 +46,5 @@ public class Member extends BaseEntity {
     public void addMemberRole(MemberRole memberRole) {
         roleSet.add(memberRole);
     }
+
 }
