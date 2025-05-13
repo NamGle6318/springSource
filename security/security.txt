@@ -48,9 +48,17 @@ csrf 값 확인 : form action 값 적었는지 확인
 security 접근 제어 방식
 	1. Controller 에서 @PreAuthorize 사용
 	2. Security 의 FilterChain 관련 메소드에서 requestMatchers("주소").permitAll()로 허용하기
-
+단 
+요청 → SecurityFilterChain (URL 접근 허용 여부 판단)
+        ↓ 통과 시
+   → @PreAuthorize 등 메서드 보안 검사
+        ↓ 통과 시
+   → Controller 실행 === FilterChain에서 주소가 막혀버리면 @PreAuthorize를 사용해도 해당 컨트롤러까지 도달자체를 못함
+--------------
 실무
 서버 : 스프링부트
+	컨트롤러 -> 서비스 -> 레포지토리 -> dto, entity
+
 화면 : 프로젝트마다 다름 (jsp[레거시 프로젝트], 템플릿(thymeleaf, ...), react
 
 jsp는 thymeleaf와 유사, 스프링부트에서는 jsp는 기본 템플릿이 아님 => 설정 작업 필요

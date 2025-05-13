@@ -28,7 +28,7 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @PreAuthorize("permitAll")
+    @PreAuthorize("permitAll()")
     @GetMapping("/board/{bno}")
     public List<ReplyDTO> getList(@PathVariable Long bno) {
         log.info("bno 댓글 요청 {}", bno);

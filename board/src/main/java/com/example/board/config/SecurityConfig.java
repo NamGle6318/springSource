@@ -45,11 +45,10 @@ public class SecurityConfig {
                                                 .requestMatchers("/css/**", "/js/**",
                                                                 "/img/**", "/icon/**")
                                                 .permitAll()
-                                                .requestMatchers("/board/list", "/board/read", "/member/register",
-                                                                "/replies/board/**")
+                                                .requestMatchers("/board/list", "/board/read", "/member/register")
                                                 .permitAll()
                                                 // .requestMatchers(/board/modify") .authenticated()
-                                                .requestMatchers("/board/modify")
+                                                .requestMatchers("/board/modify", "/replies/board/**")
                                                 .hasAnyRole("ADMIN", "MANAGER", "USER", "ANOYMOUS")
                                                 .anyRequest().authenticated())
                                 .formLogin(login -> login.loginPage("/member/login")
