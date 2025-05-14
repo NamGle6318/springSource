@@ -1,0 +1,53 @@
+
+영화 : 회원 = N : M
+
+영화 : 영화 포스터 = 1 : N
+
+영화 : 리뷰 = 1 : N
+
+맴버 : 리뷰 = 1: N
+
+
+
+
+Entity : MovieImage, Movie, Member, MemberRole, Review
+
+
+
+-- 번호, 무비 이미지, 무비명,영화별 리뷰 개수, 평균 평점 생성일
+-- 무비 이미지 = movieImage.inum 으로 접근, 단 하나의 movie에 대한 이미지는 1개 이상이기 때문에, ord의 값이 제일 낮은 inum만 출력
+-- 리뷰개수, 평균 평점
+SELECT M.MNO, COUNT(*) AS "cnt", avg(r.GRADE) AS "avg" FROM review r JOIN  MOVIE m ON m.MNO  = r.MOVIE_MNO GROUP BY M.MNO;
+
+SELECT
+	m.MNO,
+	mi.INUM ,
+	m.TITLE,
+	t."cnt",
+	t."avg" ,
+	m.CREATED_DATE
+FROM
+	MOVIE m
+JOIN MOVIE_IMAGE mi ON
+	m.MNO = mi.MOVIE_MNO AND
+	mi.inum IN (
+	SELECT
+		min(mi.inum)
+	FROM
+		movie_image mi
+	GROUP BY
+		mi.MOVIE_MNO)
+JOIN (
+	SELECT
+		M.MNO,
+		COUNT(*) AS "cnt",
+		avg(r.GRADE) AS "avg"
+	FROM
+		review r
+	JOIN MOVIE m ON
+		m.MNO = r.MOVIE_MNO
+	GROUP BY
+		M.MNO) t ON
+	t.MNO = m.MNO;
+
+	

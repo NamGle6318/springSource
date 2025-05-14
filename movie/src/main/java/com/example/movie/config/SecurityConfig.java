@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+// import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 // import com.example.movie.security.CustomLoginSuccessHandler;
 
@@ -44,10 +44,10 @@ public class SecurityConfig {
                 return http.build();
         }
 
-        // @Bean // @Bean : 생성된 객체는 Spring container에 영속화됨
-        // PasswordEncoder passwordEncoder() {
-        // return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        // }
+        @Bean // @Bean : 생성된 객체는 Spring container에 영속화됨
+        PasswordEncoder passwordEncoder() {
+                return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        }
 
         // @Bean
         // // user의 name, password, roles 정보 주입하여 SecurityContextHolder에 저장시키기 (DB사용 안하는
