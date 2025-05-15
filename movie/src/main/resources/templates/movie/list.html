@@ -36,7 +36,11 @@
                     </div>
                     <div>
                       <p class="font-semibold">
-                        <a href="#" th:text="${movie.title}">영화명</a>
+                        <a
+                          th:href="@{read(mno =${movie.mno} ,page=${pageRequestDTO.page}, type=${pageRequestDTO.type}, size=${pageRequestDTO.size}, keyword=${pageRequestDTO.keyword})}"
+                          th:text="${movie.title}"
+                          >영화명</a
+                        >
                       </p>
                     </div>
                   </div>
@@ -84,7 +88,7 @@
                 </li>
                 <li th:each=" page: ${result.pageNumList}">
                   <a
-                    th:class="'px-3 py-1 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple ' + ${result.current == page ? 'text-white transition-colors duration-150 bg-purple-600' : ''}"
+                    th:class="'px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple ' + ${result.current == page ? ' text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600':''}"
                     th:href="@{list(page=${page}, type=${pageRequestDTO.type}, keyword=${pageRequestDTO.keyword})}"
                   >
                     [[${page}]]

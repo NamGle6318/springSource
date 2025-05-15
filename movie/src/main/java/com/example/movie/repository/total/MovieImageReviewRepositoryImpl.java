@@ -84,10 +84,36 @@ public class MovieImageReviewRepositoryImpl extends QuerydslRepositorySupport im
 
     }
 
+    // 영화 상세정보
     @Override
     public List<Object[]> getMovieRow(Long mno) {
+        log.info("영화 상세정보 요청");
 
-        throw new UnsupportedOperationException("Unimplemented method 'getMovieRow'");
+        QMovie movie = QMovie.movie;
+        QMovieImage movieImage = QMovieImage.movieImage;
+        QReview review = QReview.review;
+
+        from(movieImage);
+        JPQLQuery<MovieImage> query = from(movieImage);
+        query.leftJoin(movie).on(movieImage.movie.eq(movie));
+
+        // 리스트의 영화 리뷰개수 subQuery
+        JPQLQuery<Long> count = JPAExpressions.select(review.countDistinct()).from(review)
+                .where(review.movie.eq(movieImage.movie));
+
+        JPQLQuery<Double> avg = JPAExpressions.select(review.grade.avg().round()).from(review)
+                .where(review.movie.eq(movieImage.movie));
+
+        JPQLQuery<Tuple> tuple = query
+                .select(movie, movieImage, count, avg)
+                .where(movieImage.movie.mno.eq(mno))
+                .orderBy(movieImage.inum.desc());
+
+        List<Tuple> result = tuple.fetch();
+
+        List<Object[]> list = result.stream().map(t -> t.toArray()).collect(Collectors.toList());
+
+        return list;
     }
 
 }

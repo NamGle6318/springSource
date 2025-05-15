@@ -1,6 +1,7 @@
 package com.example.movie.repository;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -104,6 +105,16 @@ public class MovieRepositoryTest {
             // **movie, movieImage의 타입은 해당 클래스가 아닌 Object[]이기 때문에 casting이 필요함**
             System.out.println(Arrays.toString(objects));
         }
+    }
+
+    @Test
+    public void readTest() {
+        List<Object[]> result = movieImageRepository.getMovieRow(2L);
+        for (Object[] objects : result) {
+            System.out.println(Arrays.toString(objects));
+        }
+        System.out.println("------------------");
+        System.out.println(Arrays.toString(result.get(0)));
     }
 
 }
