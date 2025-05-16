@@ -2,6 +2,7 @@ package com.example.movie.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +27,6 @@ import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.movie.dto.UploadResultDTO;
@@ -40,7 +41,7 @@ public class UploadController {
 
     // application.properties 에 작성한 값 불러오기
     @Value("${com.example.movie.upload.path}")
-    private String uploadPath;
+    private String uploadPath; // = /(상대경로)/upload
 
     @GetMapping("/create")
     public String getUploadForm() {
@@ -48,17 +49,43 @@ public class UploadController {
         return "/upload/test";
     }
 
+    @PostMapping("/remove")
+    public ResponseEntity<String> postRemoveFile(String fileName) {
+
+        log.info("해당 파일 삭제 요청 : {}", fileName);
+        try {
+            String oriFileName = URLDecoder.decode(fileName, "utf-8"); // 2025~/upload/
+
+            File file = new File(uploadPath + File.separator + oriFileName);
+            File thumbnailFile = new File(file.getParent(), "s_" + file.getName()); // file.getParent() = 파일의 폴더 경로까지 다
+                                                                                    // 끌어옴
+
+            log.info("oriFileName {}", oriFileName);
+            log.info("file {}", file);
+            log.info("thumbnailFile {}", thumbnailFile);
+            // 원본, 썸네일 파일 삭제
+            file.delete();
+            thumbnailFile.delete();
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     // Rest 방식으로 전달하기 위해 클래스 타입을 ResponseEntity<>로 설정
     @PostMapping("/files")
     public ResponseEntity<List<UploadResultDTO>> postUpload(MultipartFile[] uploadFiles) {
 
         List<UploadResultDTO> uploadResultDTOs = new ArrayList<>();
-        // MultipartFile => 파일 받아오기 , 여러개일시 (배열)[] 추가
+        // MultipartFile => 파일 받아와주는 클래스 , 여러개일시 (배열)[] 추가
         for (MultipartFile uploadFile : uploadFiles) {
             // String oriName = uploadFile.getOriginalFilename();
-            // String fileName = oriName.substring(oriName.lastIndexOf("\\") + 1);
-            // log.info("oriName {}", oriName);
-            // log.info("fileName {}", fileName);
+            // String fileName = oriName.substring(oriName.lastIndexOf("\\") + 1); //
+
+            // log.info("oriName {}", oriName); // => 파일명.jpg
+            // log.info("fileName {}", fileName); // => 파일명.jpg
 
             if (!uploadFile.getContentType().startsWith("image")) {
                 return new ResponseEntity<List<UploadResultDTO>>(HttpStatus.BAD_REQUEST);
@@ -80,6 +107,7 @@ public class UploadController {
                         + "_" + oriName;
                 File thumbFile = new File(thumbnailSaveName);
                 Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 100, 100);
+
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -91,13 +119,18 @@ public class UploadController {
     }
 
     @GetMapping("/display")
-    public ResponseEntity<byte[]> getFile(String fileName) {
+    public ResponseEntity<byte[]> getFile(String fileName, String size) {
         ResponseEntity<byte[]> result = null;
 
         try {
             String srcFileName = URLDecoder.decode(fileName, "utf-8");
 
             File file = new File(uploadPath + File.separator + srcFileName);
+
+            if (size != null && size.equals("1")) {
+                // s_ 제거
+                file = new File(file.getParent(), file.getName().substring(2));
+            }
 
             HttpHeaders headers = new HttpHeaders();
             // toPath() : 해당 파일의 타입을 반환 =>

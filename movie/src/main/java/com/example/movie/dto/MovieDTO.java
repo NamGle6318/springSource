@@ -29,7 +29,9 @@ public class MovieDTO {
     private LocalDateTime updatedDate;
 
     // 평점
-    private Double avg;
+    @Builder.Default
+    private Double avg = 0D;
     // 리뷰수
-    private Long reviewCnt;
+    @Builder.Default
+    private Long reviewCnt = 0L;
 }

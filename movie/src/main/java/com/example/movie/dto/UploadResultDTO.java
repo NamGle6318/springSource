@@ -35,4 +35,18 @@ public class UploadResultDTO {
 
         return fullPath;
     }
+
+    public String getThumbnailImageURL() {
+        String fullPath = "";
+
+        try {
+            // Spring Security의 encode : 원래의 값에 Salt값을 넣어서 해싱한 것 = {bcrypt} 방식(변경가능)
+            fullPath = URLEncoder.encode(folderPath + "/" + "s_" + uuid + "_" + fileName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+
+            e.printStackTrace();
+        }
+
+        return fullPath;
+    }
 }

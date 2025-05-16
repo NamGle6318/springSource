@@ -27,6 +27,25 @@ public class MovieController {
 
     private final MovieService movieService;
 
+    @GetMapping("/create")
+    public void getCreate(PageRequestDTO pageRequestDTO) {
+
+    }
+
+    @PostMapping("/create")
+    public String postCreate(MovieDTO movieDTO, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
+        log.info("영화 등록 요청 {}", movieDTO);
+
+        Long mno = movieService.createMovie(movieDTO);
+        rttr.addAttribute("mno", mno);
+        rttr.addAttribute("page", pageRequestDTO.getPage());
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+
+        return "redirect:/movie/read";
+    }
+
     @GetMapping("/list")
     public void getList(PageRequestDTO pageRequestDTO, Model model) {
         log.info("영화 리스트 요청");
