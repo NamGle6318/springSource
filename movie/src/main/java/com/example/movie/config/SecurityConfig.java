@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
-// import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 // import com.example.movie.security.CustomLoginSuccessHandler;
 
@@ -27,19 +27,30 @@ public class SecurityConfig {
         SecurityFilterChain securityFilterChain(HttpSecurity http)
                         throws Exception {
                 http.authorizeHttpRequests(authorize -> authorize
-                                .anyRequest()
-                                .permitAll());
+                                .requestMatchers("/", "/assets/**", "/upload/**")
+                                .permitAll()
+                                .requestMatchers("/movie/list", "/movie/read")
+                                .permitAll()
+                                .requestMatchers("/reviews/**", "/upload/display/**")
+                                .permitAll()
+                                .requestMatchers("/member/register")
+                                .permitAll()
+                                .anyRequest().authenticated());
 
                 http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
-                // .formLogin(login -> login.loginPage("/member/login")
-                // // .successHandler(successHandler())
-                // .permitAll());
+                // http.csrf(csrf -> csrf.disable()); // crud test를 위한 임시 비활성화
 
-                // http
-                // .logout(logout -> logout
-                // .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                // .logoutSuccessUrl("/"));
+                http.formLogin(login -> login.loginPage("/member/login")
+                                .defaultSuccessUrl("/movie/list", true)
+                                // .successHandler(successHandler())
+
+                                .permitAll());
+
+                http
+                                .logout(logout -> logout
+                                                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                                                .logoutSuccessUrl("/"));
 
                 // http.rememberMe(remember -> remember.rememberMeServices(rememberMeServices));
 

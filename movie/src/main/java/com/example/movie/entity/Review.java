@@ -1,6 +1,8 @@
 package com.example.movie.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,7 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Getter
-@Setter
 @ToString(exclude = { "member", "movie" })
 @Builder
 @NoArgsConstructor
@@ -26,13 +27,17 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rno;
 
-    private int grade;
+    @Setter
+    @Builder.Default
+    private int grade = 0;
 
+    @Setter
+    @Column(nullable = false)
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Movie movie;
 }

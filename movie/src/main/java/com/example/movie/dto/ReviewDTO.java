@@ -28,4 +28,7 @@ public class ReviewDTO {
     private String email;
     private String nickname;
 
+    // movie 정보
+    private Long mno;
+
 }

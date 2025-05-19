@@ -2,6 +2,7 @@ package com.example.movie.controller;
 
 import java.util.Arrays;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -32,6 +33,7 @@ public class MovieController {
 
     }
 
+    // @PreAuthorize("")
     @PostMapping("/create")
     public String postCreate(MovieDTO movieDTO, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
         log.info("영화 등록 요청 {}", movieDTO);
@@ -48,9 +50,10 @@ public class MovieController {
 
     @GetMapping("/list")
     public void getList(PageRequestDTO pageRequestDTO, Model model) {
-        log.info("영화 리스트 요청");
+        log.info("영화 리스트 요청 ");
 
         PageResultDTO<MovieDTO> result = movieService.getList(pageRequestDTO);
+
         model.addAttribute("result", result);
     }
 
