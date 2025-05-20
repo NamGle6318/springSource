@@ -38,11 +38,11 @@ const reviewList = () => {
       result += `<div class="d-flex flex-column align-self-center">`;
 
       result += `<div class="mb-2">`;
-      // if (currentUserEmail.content == reply.replyerEmail || checkRoleType) {
-      result += `<button class="btn btn-outline-danger btn-sm">삭제</button>`;
-      result += `</div>`;
-      result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`;
-      // }
+      if (loginUser == review.email) {
+        result += `<button class="btn btn-outline-danger btn-sm">삭제</button>`;
+        result += `</div>`;
+        result += `<div><button class="btn btn-outline-success btn-sm">수정</button></div>`;
+      }
       result += `</div></div></div></div>`;
     });
     reviewDiv.innerHTML = result;
@@ -120,7 +120,7 @@ reviewForm.addEventListener("submit", (e) => {
         console.log(res.data);
         alert("댓글 수정 완료");
         reviewForm.rno.value = "";
-        reviewForm.nickname.value = "";
+        // reviewForm.nickname.value = "";
 
         reviewForm.mid.value = "";
         reviewForm.text.value = "";
@@ -148,7 +148,7 @@ reviewForm.addEventListener("submit", (e) => {
       .then((res) => {
         console.log(res.data);
         reviewForm.rno.value = "";
-        reviewForm.nickname.value = "";
+        // reviewForm.nickname.value = "";
 
         // reviewForm.mid.value = "";
         reviewForm.text.value = "";

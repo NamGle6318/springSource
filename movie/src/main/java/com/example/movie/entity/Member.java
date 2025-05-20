@@ -10,14 +10,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import lombok.Getter;
-// import lombok.Setter;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.AllArgsConstructor;
 
 @Getter
-// @Setter
+
 @ToString
 @Builder
 @NoArgsConstructor
@@ -32,11 +32,13 @@ public class Member extends BaseEntity {
     private Long mid;
 
     @Column(unique = true)
+
     private String email;
+    @Setter
     private String password;
+    @Setter
     private String nickname;
 
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
-
 }

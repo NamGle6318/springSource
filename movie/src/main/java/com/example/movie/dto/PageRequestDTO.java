@@ -26,8 +26,10 @@ public class PageRequestDTO {
     @Builder.Default
     private int size = 10;
 
-    private String type;
+    @Builder.Default
+    private String type = "";
 
-    private String keyword;
+    @Builder.Default
+    private String keyword = "";
 
 }

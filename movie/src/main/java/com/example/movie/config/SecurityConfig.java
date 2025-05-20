@@ -29,7 +29,7 @@ public class SecurityConfig {
                 http.authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers("/", "/assets/**", "/upload/**")
                                 .permitAll()
-                                .requestMatchers("/movie/list", "/movie/read")
+                                .requestMatchers("/movie/list", "/movie/read", "/auth")
                                 .permitAll()
                                 .requestMatchers("/reviews/**", "/upload/display/**")
                                 .permitAll()
@@ -42,7 +42,7 @@ public class SecurityConfig {
                 // http.csrf(csrf -> csrf.disable()); // crud test를 위한 임시 비활성화
 
                 http.formLogin(login -> login.loginPage("/member/login")
-                                .defaultSuccessUrl("/movie/list", true)
+                                .defaultSuccessUrl("/", true)
                                 // .successHandler(successHandler())
 
                                 .permitAll());

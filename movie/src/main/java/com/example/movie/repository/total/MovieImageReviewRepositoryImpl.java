@@ -28,92 +28,103 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MovieImageReviewRepositoryImpl extends QuerydslRepositorySupport implements MovieImageReviewRepository {
 
-    // movieImage의 inum, path 추출 목적?
-    public MovieImageReviewRepositoryImpl() {
-        super(MovieImage.class);
+        // movieImage의 inum, path 추출 목적?
+        public MovieImageReviewRepositoryImpl() {
+                super(MovieImage.class);
 
-    }
+        }
 
-    // 영화번호, 영화 이미지, 영화명, 영화의 리뷰 개수, 평균 평점, 생성일을 조회하는 리스트 출력 query문
-    @Override
-    public Page<Object[]> getTotalList(String type, String keyword, Pageable pageable) {
-        QMovie movie = QMovie.movie;
-        QMovieImage movieImage = QMovieImage.movieImage;
-        QReview review = QReview.review;
+        // 영화번호, 영화 이미지, 영화명, 영화의 리뷰 개수, 평균 평점, 생성일을 조회하는 리스트 출력 query문
+        @Override
+        public Page<Object[]> getTotalList(String type, String keyword, Pageable pageable) {
+                QMovie movie = QMovie.movie;
+                QMovieImage movieImage = QMovieImage.movieImage;
+                QReview review = QReview.review;
 
-        from(movieImage);
-        JPQLQuery<MovieImage> query = from(movieImage);
-        query.leftJoin(movie).on(movieImage.movie.eq(movie));
+                from(movieImage);
+                JPQLQuery<MovieImage> query = from(movieImage);
+                query.leftJoin(movie).on(movieImage.movie.eq(movie));
 
-        // 리스트의 영화 리뷰개수 subQuery
-        JPQLQuery<Long> count = JPAExpressions.select(review.countDistinct()).from(review)
-                .where(review.movie.eq(movieImage.movie));
+                // 리스트의 영화 리뷰개수 subQuery
+                JPQLQuery<Long> count = JPAExpressions.select(review.countDistinct()).from(review)
+                                .where(review.movie.eq(movieImage.movie));
 
-        JPQLQuery<Double> avg = JPAExpressions.select(review.grade.avg().round()).from(review)
-                .where(review.movie.eq(movieImage.movie));
+                JPQLQuery<Double> avg = JPAExpressions.select(review.grade.avg().round()).from(review)
+                                .where(review.movie.eq(movieImage.movie));
 
-        JPQLQuery<Tuple> tuple = query
-                .select(movie, movieImage, count, avg)
-                .where(movieImage.inum.in(JPAExpressions.select(movieImage.inum.min())
-                        .from(movieImage)
-                        .groupBy(movieImage.movie)));
-        // .orderBy(movie.mno.desc());
+                JPQLQuery<Tuple> tuple = query
+                                .select(movie, movieImage, count, avg)
+                                .where(movieImage.inum.in(JPAExpressions.select(movieImage.inum.min())
+                                                .from(movieImage)
+                                                .groupBy(movieImage.movie)));
+                // .orderBy(movie.mno.desc());
 
-        // 검색
-        BooleanBuilder builder = new BooleanBuilder();
-        BooleanExpression expression = movie.mno.gt(0);
-        builder.and(expression);
+                // 검색
+                BooleanBuilder builder = new BooleanBuilder();
+                BooleanExpression expression = movie.mno.gt(0);
+                builder.and(expression);
 
-        // Sort 생성
-        Sort sort = pageable.getSort();
-        sort.stream().forEach(order -> {
-            // import com.querydsl.core.tpyes.Order;
-            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+                // 검색
+                BooleanBuilder condition = new BooleanBuilder();
 
-            String prop = order.getProperty();
-            PathBuilder<Movie> orderBuilder = new PathBuilder<>(Movie.class, "movie");
-            tuple.orderBy(new OrderSpecifier(direction, orderBuilder.get(prop)));
+                if (type.contains("title") && keyword != null) {
+                        condition.or(movie.title.contains(keyword));
 
-        });
+                }
+                builder.and(condition);
+                tuple.where(builder);
 
-        tuple.offset(pageable.getOffset());
-        tuple.limit(pageable.getPageSize());
-        List<Tuple> result = tuple.fetch();
-        long totalCnt = tuple.fetchCount();
-        return new PageImpl<>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, totalCnt);
+                // Sort 생성
+                Sort sort = pageable.getSort();
+                sort.stream().forEach(order -> {
+                        // import com.querydsl.core.tpyes.Order;
+                        Order direction = order.isAscending() ? Order.ASC : Order.DESC;
 
-    }
+                        String prop = order.getProperty();
+                        PathBuilder<Movie> orderBuilder = new PathBuilder<>(Movie.class, "movie");
+                        tuple.orderBy(new OrderSpecifier(direction, orderBuilder.get(prop)));
 
-    // 영화 상세정보
-    @Override
-    public List<Object[]> getMovieRow(Long mno) {
-        log.info("영화 상세정보 요청");
+                });
 
-        QMovie movie = QMovie.movie;
-        QMovieImage movieImage = QMovieImage.movieImage;
-        QReview review = QReview.review;
+                tuple.offset(pageable.getOffset());
+                tuple.limit(pageable.getPageSize());
+                List<Tuple> result = tuple.fetch();
+                long totalCnt = tuple.fetchCount();
+                return new PageImpl<>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable,
+                                totalCnt);
 
-        from(movieImage);
-        JPQLQuery<MovieImage> query = from(movieImage);
-        query.leftJoin(movie).on(movieImage.movie.eq(movie));
+        }
 
-        // 리스트의 영화 리뷰개수 subQuery
-        JPQLQuery<Long> count = JPAExpressions.select(review.countDistinct()).from(review)
-                .where(review.movie.eq(movieImage.movie));
+        // 영화 상세정보
+        @Override
+        public List<Object[]> getMovieRow(Long mno) {
+                log.info("영화 상세정보 요청");
 
-        JPQLQuery<Double> avg = JPAExpressions.select(review.grade.avg().round()).from(review)
-                .where(review.movie.eq(movieImage.movie));
+                QMovie movie = QMovie.movie;
+                QMovieImage movieImage = QMovieImage.movieImage;
+                QReview review = QReview.review;
 
-        JPQLQuery<Tuple> tuple = query
-                .select(movie, movieImage, count, avg)
-                .where(movieImage.movie.mno.eq(mno))
-                .orderBy(movieImage.inum.desc());
+                from(movieImage);
+                JPQLQuery<MovieImage> query = from(movieImage);
+                query.leftJoin(movie).on(movieImage.movie.eq(movie));
 
-        List<Tuple> result = tuple.fetch();
+                // 리스트의 영화 리뷰개수 subQuery
+                JPQLQuery<Long> count = JPAExpressions.select(review.countDistinct()).from(review)
+                                .where(review.movie.eq(movieImage.movie));
 
-        List<Object[]> list = result.stream().map(t -> t.toArray()).collect(Collectors.toList());
+                JPQLQuery<Double> avg = JPAExpressions.select(review.grade.avg().round()).from(review)
+                                .where(review.movie.eq(movieImage.movie));
 
-        return list;
-    }
+                JPQLQuery<Tuple> tuple = query
+                                .select(movie, movieImage, count, avg)
+                                .where(movieImage.movie.mno.eq(mno))
+                                .orderBy(movieImage.inum.desc());
+
+                List<Tuple> result = tuple.fetch();
+
+                List<Object[]> list = result.stream().map(t -> t.toArray()).collect(Collectors.toList());
+
+                return list;
+        }
 
 }

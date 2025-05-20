@@ -84,7 +84,8 @@ public class MovieService {
 
                 Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(),
                                 Sort.by("mno").descending());
-                Page<Object[]> result = movieImageRepository.getTotalList(null, null, pageable);
+                Page<Object[]> result = movieImageRepository.getTotalList(pageRequestDTO.getType(),
+                                pageRequestDTO.getKeyword(), pageable);
                 // select(movie, movieImage, count, avg) 순서로 결과 출력하나
                 Function<Object[], MovieDTO> function = (en -> entityToDto((Movie) en[0],
                                 Arrays.asList((MovieImage) en[1]),
