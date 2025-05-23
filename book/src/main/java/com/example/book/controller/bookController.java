@@ -35,15 +35,16 @@ public class bookController {
 
     private final BookService bookService;
 
-    @GetMapping("/list")
-    public void getHome(Model model, PageRequestDTO pageRequestDTO, RedirectAttributes rttr) {
-        log.info("page Request 요청 {}", pageRequestDTO);
-        PageResultDTO<BookDTO> pageResultDTO = bookService.readAll(pageRequestDTO);
-        model.addAttribute("result", pageResultDTO);
+    // @GetMapping("/list")
+    // public void getHome(Model model, PageRequestDTO pageRequestDTO,
+    // RedirectAttributes rttr) {
+    // log.info("page Request 요청 {}", pageRequestDTO);
+    // PageResultDTO<BookDTO> pageResultDTO = bookService.readAll(pageRequestDTO);
+    // model.addAttribute("result", pageResultDTO);
 
-        // model.addAttribute("num", rttr.getAttribute("num"));
+    // // model.addAttribute("num", rttr.getAttribute("num"));
 
-    }
+    // }
 
     @GetMapping({ "/read", "/modify" })
     public void getRead(Long code, Model model, PageRequestDTO pageRequestDTO) {
