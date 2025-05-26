@@ -2,9 +2,11 @@ package com.example.todo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.todo.dto.TodoDTO;
@@ -48,6 +50,13 @@ public class TodoService {
         return todoRepository.save(todo).getId();
     }
 
+    public Long changeFinished2(TodoDTO todoDTO) {
+        // 해당 todo의 값을 check로 변경
+        Todo todo = todoRepository.findById(todoDTO.getId()).get();
+        todo.setFinished(!todoDTO.isFinished()); // lombok boolean의 getter = is
+        return todoRepository.save(todo).getId();
+    }
+
     public TodoDTO read(Long id) {
         Todo todo = todoRepository.findById(id).get();
 
@@ -61,5 +70,22 @@ public class TodoService {
     public Long create(TodoDTO todoDTO) {
         Todo todo = modelMapper.map(todoDTO, Todo.class);
         return todoRepository.save(todo).getId();
+    }
+
+    public List<TodoDTO> list2() {
+        List<Todo> list = todoRepository.findAll(Sort.by("id").descending());
+
+        List<TodoDTO> todos = list.stream()
+                .map(todo -> modelMapper.map(todo, TodoDTO.class))
+                .collect(Collectors.toList());
+
+        return todos;
+    }
+
+    public TodoDTO create2(TodoDTO todoDTO) {
+        Todo todo = modelMapper.map(todoDTO, Todo.class);
+        Todo newTodo = todoRepository.save(todo);
+
+        return modelMapper.map(newTodo, TodoDTO.class);
     }
 }
