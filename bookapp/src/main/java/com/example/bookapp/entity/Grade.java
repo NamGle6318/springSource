@@ -1,0 +1,41 @@
+package com.example.bookapp.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Getter
+@ToString(exclude = { "novel", "member" })
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Grade {
+
+    @Id
+    @Column(name = "GRADE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private int rating; // 점수
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "NOVEL_ID")
+    private Novel novel;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+}
