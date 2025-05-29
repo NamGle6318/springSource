@@ -14,6 +14,7 @@ import com.example.bookapp.dto.PageRequestDTO;
 import com.example.bookapp.dto.PageResultDTO;
 import com.example.bookapp.service.NovelService;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -54,6 +55,13 @@ public class NovelRestController {
         return novelService.avaUpdate(novelDTO);
     }
 
+    @PutMapping("/edit/{id}")
+    public Long putPubNovel(@RequestBody NovelDTO novelDTO) {
+        log.info("수정 {}", novelDTO);
+
+        return novelService.pubUpdate(novelDTO);
+    }
+
     @PostMapping("add")
     public Long postNovel(@RequestBody NovelDTO novelDTO) {
         log.info("생성 요청 {}", novelDTO);
@@ -62,7 +70,8 @@ public class NovelRestController {
     }
 
     @DeleteMapping("{id}")
-    public Long removeNovel(@RequestBody NovelDTO novelDTO) {
+    public Long removeNovel(@PathVariable Long id) {
+        NovelDTO novelDTO = novelService.getRow(id);
         return novelService.novelRemove(novelDTO);
     }
 

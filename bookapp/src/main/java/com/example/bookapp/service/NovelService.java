@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.bookapp.dto.NovelDTO;
@@ -80,6 +81,15 @@ public class NovelService {
     public Long avaUpdate(NovelDTO novelDTO) {
         Novel novel = novelRepository.findById(novelDTO.getId()).get();
         novel.setAvailable(novelDTO.isAvailable());
+        novelRepository.save(novel);
+
+        return novel.getId();
+    }
+
+    // 수정하기
+    public Long pubUpdate(NovelDTO novelDTO) {
+        Novel novel = novelRepository.findById(novelDTO.getId()).get();
+        novel.setPublishedDate(novelDTO.getPublishedDate());
         novelRepository.save(novel);
 
         return novel.getId();

@@ -42,6 +42,7 @@ public class Novel {
     @Column(nullable = false)
     private String author;
 
+    @Setter
     @CreatedDate
     private LocalDate publishedDate; // 출판일
 
