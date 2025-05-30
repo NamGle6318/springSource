@@ -48,7 +48,7 @@ public class NovelService {
     public PageResultDTO<NovelDTO> getList(PageRequestDTO pageRequestDTO) {
         // 페이지 -1 => 배열 인덱스 기준 0 시작
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
-        Page<Object[]> result = novelRepository.list(pageable);
+        Page<Object[]> result = novelRepository.list(pageable, pageRequestDTO);
 
         List<NovelDTO> dtoList = result.get().map(arr -> {
 

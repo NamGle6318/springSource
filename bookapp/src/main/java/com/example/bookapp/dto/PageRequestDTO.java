@@ -32,4 +32,7 @@ public class PageRequestDTO {
     @Builder.Default
     private String keyword = "";
 
+    @Builder.Default
+    private Long genre = 0L;
+
 }

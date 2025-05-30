@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.example.bookapp.dto.PageRequestDTO;
 import com.example.bookapp.entity.Genre;
 import com.example.bookapp.entity.Grade;
 import com.example.bookapp.entity.Member;
@@ -47,7 +48,11 @@ public class NovelRepositoryTest {
     @Test
     public void getNovelListTest() {
         Pageable pageable = PageRequest.of(1, 10, Sort.by("id").descending());
-        Page<Object[]> result = novelRepository.list(pageable);
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setPage(5);
+        pageRequestDTO.setSize(10);
+        pageRequestDTO.setKeyword("z");
+        Page<Object[]> result = novelRepository.list(pageable, pageRequestDTO);
         for (Object[] objects : result) {
             System.out.println(Arrays.toString(objects));
         }
