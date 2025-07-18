@@ -1,0 +1,27 @@
+{
+  "analysis": {
+    "filter": {
+      "product_synonym_filter": {
+        "type": "synonym",
+        "synonyms_path": "analysis/products_synonyms.txt"
+      }
+    },
+    "analyzer": {
+      "products_name_analyzer": {
+        "char_filter": [],
+        "tokenizer": "nori_tokenizer",
+        "multi_match": ["lowercase", "product_synonym_filter", "nori_part_of_speech", "nori_readingform"]
+      },
+      "products_description_analyzer": {
+        "char_filter": ["html_strip"],
+        "tokenizer": "nori_tokenizer",
+        "filter": ["lowercase", "nori_part_of_speech", "nori_readingform"]
+      },
+      "products_category_analyzer": {
+        "char_filter": [],
+        "tokenizer": "nori_tokenizer",
+        "filter": ["product_synonym_filter", "lowercase", "nori_part_of_speech", "nori_readingform"]
+      }
+    }
+  }
+}

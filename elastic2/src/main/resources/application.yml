@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: C##java
+    password: 12345
+    driver-class-name: oracle.jdbc.OracleDriver
+  application:
+    name: elastic2
+  elasticsearch:
+    uris: http://localhost:9200
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.format_sql: true
+      hibernate.highlight_sql: true
+
+server:
+  servlet:
+    encoding:
+      enabled: true
+
+logging:
+  level:
+    org.elasticsearch.client: trace
+    "[org.hibernate.sql]": debug
+    org.hibernate.orm.jdbc.bind: debug
